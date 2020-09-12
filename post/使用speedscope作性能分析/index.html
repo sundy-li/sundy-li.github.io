@@ -49,7 +49,7 @@
 <meta itemprop="description" content="">
 <meta itemprop="datePublished" content="2020-09-11T19:07:13+08:00" />
 <meta itemprop="dateModified" content="2020-09-11T19:07:13+08:00" />
-<meta itemprop="wordCount" content="1577">
+<meta itemprop="wordCount" content="1637">
 
 
 
@@ -144,7 +144,7 @@
     <li><a href="#安装可选">安装(可选)</a></li>
     <li><a href="#使用">使用</a></li>
     <li><a href="#clickhouse-speedscope">clickhouse-speedscope</a></li>
-    <li><a href="#改造过程">改造过程</a></li>
+    <li><a href="#总结">总结</a></li>
   </ul>
 </nav>
   </div>
@@ -153,8 +153,7 @@
       <p><img src="/images/cpu-bash-flamegraph.svg" alt="flamegraph"></p>
 <h1 id="前言">前言</h1>
 <p>如果要按工具链友好度评选一门最佳语言，我会首选 Golang，因为它有一系列的<code>go tool</code>工具，面向开发者非常友好。</p>
-<p>其中<code>go tool pprof</code> 结合 <code>go-torch</code> ，能快速得出go程序的火焰图。在Linux系统中， <code>perf</code> 工具也十分强大，里面有各种操作分析系统级进程的性能。但这篇文章中，我们不会详细讲解 <code>perf</code> 的使用，读者可以去 <a href="http://www.brendangregg.com/perf.html">这里</a> 了解过多。</p>
-<p>一次偶然的机会，笔者接触到了 <code>SpeedScope</code>，本文以调优 <code>ClickHouse</code> 为例子，介绍一下 <code>SpeedScope</code> 工具的使用。</p>
+<p>其中<code>go tool pprof</code> 结合 <code>go-torch</code> ，能快速得出go程序的火焰图。在Linux系统中， <code>perf</code> 工具也十分强大，里面有各种子工具分析系统级进程的性能。<code>perf</code> 通常结合 <code>FlameGraph</code> 可以生成不错的火焰图。在一次偶然的机会中，笔者接触到了 <code>SpeedScope</code>，本文以调优 <code>ClickHouse</code> 为例子，介绍一下 <code>SpeedScope</code> 工具的使用。</p>
 <h1 id="speedscope-介绍">SpeedScope 介绍</h1>
 <p><a href="https://github.com/jlfwong/speedscope#usage">SpeedScope</a> 是一款在线的 <code>flamegraph</code> 可视化工具。它可以和多个编程语言相结合，也可以将 <code>perf</code>  report的结果拖拽到网站里面在线分析。</p>
 <h1 id="安装可选">安装(可选)</h1>
@@ -209,18 +208,22 @@
 </div>
 </div><p><img src="/images/speedscope1.png" alt="speedscope截图"></p>
 <p>进入页面后，我们可以非常直观地看到各个时间轴上的调用开销时间占用情况。上面截图中，可以反映出，10s内的采样中，有5.99s 耗在 <code>AggregateFunctionAvg</code> 函数中， 有 2.14s 耗在 <code>NumbersSource::generate</code> 生成中。</p>
+<p>使用 <code>Perf</code> 的方式，我们可以很直观得看到性能图，但我们并不能针对特定的SQL进行profile，下面介绍下 <code>clickhouse-speedscope</code> 如何针对特定SQL进行profile。</p>
 <h1 id="clickhouse-speedscope">clickhouse-speedscope</h1>
-<p>第一次接触到SpeedScope，是无意中看到了 <a href="https://github.com/laplab/clickhouse-speedscope">clickhouse-speedscope</a> 项目。这个项目巧妙地利用了 clickhouse的系统表 <code>system.trace_log</code> 进行采样。
-Clone后，会发现代码非常简单，就一个python文件，监控了http端口进行处理请求的返回。</p>
+<p>第一次接触到SpeedScope，是无意中看到了 <a href="https://github.com/laplab/clickhouse-speedscope">clickhouse-speedscope</a> 项目。这个项目巧妙地利用了 clickhouse的系统表 <code>system.trace_log</code> 进行采样。</p>
+<blockquote>
+<p>注意：要使用<code>system.trace_log</code> ，必须安装好 <code>clickhouse-common-static-dbg</code> 库, 并且开启 <code>allow_introspection_functions</code>等参数，更多配置参数参考<a href="https://clickhouse.tech/docs/en/operations/system-tables/trace_log/">这里</a>.</p>
+</blockquote>
+<p>Clone <a href="https://github.com/laplab/clickhouse-speedscope">clickhouse-speedscope</a> 后，发现代码非常简单，核心就一个python文件，监控了http端口进行处理请求的返回。</p>
 <ul>
-<li>安装后，我们首先开启下端口监听</li>
+<li>pip安装好依赖库后，我们首先开启下端口监听 8089端口，同时会转发 query_id 查询 服务器域名为ck001 的clickhouse-server</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">python  main.py --ch-host 127.0.0.1 --proxy-port 8123
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">python  main.py --ch-host ck001 --proxy-port 8089
 </code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -334,26 +337,21 @@ Ok.
 </code></pre></td></tr></table>
 </div>
 </div><ul>
-<li>拿到了query-id，之后，我们加入参数继续跑python脚本</li>
+<li>拿到了query-id，之后，我们通过 curl 可以直接获取到traceing的结果。</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">python</span>  <span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">ch</span><span class="o">-</span><span class="n">host</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">--</span><span class="n">proxy</span><span class="o">-</span><span class="n">port</span> <span class="mi">8123</span> <span class="o">--</span><span class="n">query</span><span class="o">-</span><span class="nb">id</span> <span class="mf">6e4</span><span class="n">b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span>
+<pre class="chroma"><code class="language-bash" data-lang="bash">curl <span class="s1">&#39;http://localhost:8089/query?query_id=fe9078cd-9570-4895-b328-4728a097306a&#39;</span> <span class="p">|</span> speedscope -
 </code></pre></td></tr></table>
 </div>
-</div><p>将会输出一个url链接，将这个url 贴入到浏览器后，不出意外的话我们就能马上看到可视化图形了。</p>
-<blockquote>
-<p>但往往意外总是来得突如其然</p>
-</blockquote>
-<p>原因是因为 SpeedScope 用了https，而我们的url是http的，导致ajax 跨域请求出现 <code>blocked:mixed-content</code> 错误。可能要我们的浏览器进行相关配置才能打开页面，但我没有仔细研究。</p>
-<p>我觉得可以适当改造下这个repo， 不通过浏览器前端代理，而是直接通过这个web接口执行SQL，生成对应的 txt 文件，然后我们就可以像上面那样直接拖入了。</p>
-<h1 id="改造过程">改造过程</h1>
-<ul>
-<li>TODO</li>
+</div><ul>
+<li>如果没有装 <code>speedscope</code>， 也可以重定向到一个文件中，然后拖拽到 <code>https://www.speedscope.app/</code> 中。</li>
 </ul>
+<h1 id="总结">总结</h1>
+<p>使用 <code>speedscope</code>， 我们在本地就可以很方便地进行远程profile，用起来吧！</p>
     </div>
 
     <div class="post-copyright">
