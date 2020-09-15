@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.caefab1a973f1c19cd4ce39e91e20f0fd663b85263101934701c6f8ecf260d1a.css" rel="stylesheet">
+<link href="/sass/main.min.4d2b04d7c8a38869c975c6910b1539fbf99be33e5800c5a2c44dfd84b43aac35.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -53,7 +53,7 @@
 
 
 
-<meta itemprop="keywords" content="profile,clickhouse," />
+<meta itemprop="keywords" content="profile,ClickHouse," />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="使用SpeedScope作性能分析"/>
 <meta name="twitter:description" content=""/>
@@ -123,11 +123,13 @@
 
       <div class="post-meta">
         <span class="post-time"> 2020-09-11 </span>
-        
+        <div class="post-category">
+            <a href="/categories/clickhouse/"> ClickHouse </a>
+            </div>
 
         <div class="post-tags">
             <a href="/tags/profile/">profile</a>
-            <a href="/tags/clickhouse/">clickhouse</a>
+            <a href="/tags/clickhouse/">ClickHouse</a>
             </div>
         
 
@@ -251,23 +253,23 @@
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">ubuntu :) set send_logs_level = &#39;trace&#39;;
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">ubuntu</span> <span class="p">:)</span> <span class="k">set</span> <span class="n">send_logs_level</span> <span class="o">=</span> <span class="s1">&#39;trace&#39;</span><span class="p">;</span>
 
-SET send_logs_level = &#39;trace&#39;
+<span class="k">SET</span> <span class="n">send_logs_level</span> <span class="o">=</span> <span class="s1">&#39;trace&#39;</span>
 
-Ok.
+<span class="n">Ok</span><span class="p">.</span>
 
-0 rows in set. Elapsed: 0.021 sec.
+<span class="mi">0</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span><span class="p">.</span> <span class="n">Elapsed</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">021</span> <span class="n">sec</span><span class="p">.</span>
 
-ubuntu :) set allow_introspection_functions  = 0;
+<span class="n">ubuntu</span> <span class="p">:)</span> <span class="k">set</span> <span class="n">allow_introspection_functions</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-SET allow_introspection_functions = 0
+<span class="k">SET</span> <span class="n">allow_introspection_functions</span> <span class="o">=</span> <span class="mi">0</span>
 
-[ubuntu] 2020.09.11 23:02:13.061146 [ 17134 ] {d4a0c7af-c836-4360-8264-926f634e1d94} &lt;Debug&gt; executeQuery: (from 127.0.0.1:52012) SET allow_introspection_functions = 0
-[ubuntu] 2020.09.11 23:02:13.061471 [ 17134 ] {d4a0c7af-c836-4360-8264-926f634e1d94} &lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 0.00 B.
-Ok.
+<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">13</span><span class="p">.</span><span class="mi">061146</span> <span class="p">[</span> <span class="mi">17134</span> <span class="p">]</span> <span class="err">{</span><span class="n">d4a0c7af</span><span class="o">-</span><span class="n">c836</span><span class="o">-</span><span class="mi">4360</span><span class="o">-</span><span class="mi">8264</span><span class="o">-</span><span class="mi">926</span><span class="n">f634e1d94</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Debug</span><span class="o">&gt;</span> <span class="n">executeQuery</span><span class="p">:</span> <span class="p">(</span><span class="k">from</span> <span class="mi">127</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span><span class="mi">52012</span><span class="p">)</span> <span class="k">SET</span> <span class="n">allow_introspection_functions</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">13</span><span class="p">.</span><span class="mi">061471</span> <span class="p">[</span> <span class="mi">17134</span> <span class="p">]</span> <span class="err">{</span><span class="n">d4a0c7af</span><span class="o">-</span><span class="n">c836</span><span class="o">-</span><span class="mi">4360</span><span class="o">-</span><span class="mi">8264</span><span class="o">-</span><span class="mi">926</span><span class="n">f634e1d94</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Debug</span><span class="o">&gt;</span> <span class="n">MemoryTracker</span><span class="p">:</span> <span class="n">Peak</span> <span class="n">memory</span> <span class="k">usage</span> <span class="p">(</span><span class="k">for</span> <span class="n">query</span><span class="p">):</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">B</span><span class="p">.</span>
+<span class="n">Ok</span><span class="p">.</span>
 
-0 rows in set. Elapsed: 0.042 sec.
+<span class="mi">0</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span><span class="p">.</span> <span class="n">Elapsed</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">042</span> <span class="n">sec</span><span class="p">.</span>
 </code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -306,7 +308,7 @@ Ok.
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-SQL" data-lang="SQL"><span class="n">ubuntu</span> <span class="p">:)</span> <span class="k">select</span> <span class="k">avg</span><span class="p">(</span><span class="nb">number</span><span class="p">)</span> <span class="k">from</span> <span class="n">numbers</span><span class="p">(</span><span class="mi">1000000000</span><span class="p">);</span>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">ubuntu</span> <span class="p">:)</span> <span class="k">select</span> <span class="k">avg</span><span class="p">(</span><span class="nb">number</span><span class="p">)</span> <span class="k">from</span> <span class="n">numbers</span><span class="p">(</span><span class="mi">1000000000</span><span class="p">);</span>
 
 <span class="k">SELECT</span> <span class="k">avg</span><span class="p">(</span><span class="nb">number</span><span class="p">)</span>
 <span class="k">FROM</span> <span class="n">numbers</span><span class="p">(</span><span class="mi">1000000000</span><span class="p">)</span>
@@ -352,7 +354,7 @@ Ok.
 <li>如果没有装 <code>speedscope</code>， 也可以重定向到一个文件中，然后拖拽到 <code>https://www.speedscope.app/</code> 中。</li>
 </ul>
 <h1 id="总结">总结</h1>
-<p>使用 <code>speedscope</code>， 我们在本地就可以很方便地进行远程profile，用起来吧！</p>
+<p>使用 <code>speedscope</code>， 我们在本地就可以很方便地进行远程profile，去试试吧！</p>
     </div>
 
     <div class="post-copyright">
@@ -383,7 +385,25 @@ Ok.
     </footer>
   </article>
         </div>
-        
+        <div id="comments-gitment"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/default.min.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/theme-next/theme-next-gitment@1/gitment.browser.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitment = new Gitment({
+        id: '2020-09-11 19:07:13 \u002b0800 CST',
+        title: '使用SpeedScope作性能分析',
+        link: decodeURI(location.href),
+        desc: '\u003cp\u003e\u003cimg src=\u0022\/images\/cpu-bash-flamegraph.svg\u0022 alt=\u0022flamegraph\u0022\u003e\u003c\/p\u003e',
+        owner: 'sundy-li',
+        repo: 'sundy-li.github.io',
+        oauth: {
+          client_id: 'abd3a14fb45a362f4c5e',
+          client_secret: '14ab1de0c55eec948dfc1228d1fa08c2dcb4ac81'
+        }
+      });
+      gitment.render('comments-gitment');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
 
   
 

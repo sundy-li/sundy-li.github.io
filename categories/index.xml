@@ -6,9 +6,19 @@
     <description>Recent content in Categories on sundy-li&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
+    <lastBuildDate>Fri, 11 Sep 2020 19:07:13 +0800</lastBuildDate>
     
 	<atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ClickHouse</title>
+      <link>http://localhost:1313/categories/clickhouse/</link>
+      <pubDate>Fri, 11 Sep 2020 19:07:13 +0800</pubDate>
+      
+      <guid>http://localhost:1313/categories/clickhouse/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>
