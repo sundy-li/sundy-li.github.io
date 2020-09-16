@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.4d2b04d7c8a38869c975c6910b1539fbf99be33e5800c5a2c44dfd84b43aac35.css" rel="stylesheet">
+<link href="/sass/main.min.d3dd2aa72c6d29a4db84e1ab298653302a7d6d1b3cce39981c2fc47d6df17e78.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
@@ -49,7 +49,7 @@
 <meta itemprop="description" content="">
 <meta itemprop="datePublished" content="2020-09-11T19:07:13+08:00" />
 <meta itemprop="dateModified" content="2020-09-11T19:07:13+08:00" />
-<meta itemprop="wordCount" content="1637">
+<meta itemprop="wordCount" content="1586">
 
 
 
@@ -138,7 +138,7 @@
     </header>
 
     <div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">Contents</h2>
+  <h2 class="post-toc-title">文章目录</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
@@ -161,55 +161,20 @@
 <p><a href="https://github.com/jlfwong/speedscope#usage">SpeedScope</a> 是一款在线的 <code>flamegraph</code> 可视化工具。它可以和多个编程语言相结合，也可以将 <code>perf</code>  report的结果拖拽到网站里面在线分析。</p>
 <h1 id="安装可选">安装(可选)</h1>
 <p><code>speedscope</code> 是 nodejs 编写的，安装这个工具是可选的，安装后可以基于本地生成可视化性能图。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo npm install -g speedscope
-</code></pre></td></tr></table>
-</div>
-</div><h1 id="使用">使用</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo npm install -g speedscope
+</code></pre></div><h1 id="使用">使用</h1>
 <blockquote>
 <p>我们在ClickHouse 里面执行一个”简单“且“复杂“的SQL的SQL，计算十亿个数的平均值。</p>
 </blockquote>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span> <span class="k">avg</span><span class="p">(</span><span class="nb">number</span><span class="p">)</span> <span class="k">from</span> <span class="n">numbers</span><span class="p">(</span><span class="mi">1000000000</span><span class="p">);</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>使用 <code>perf</code> 工具&quot;记录&quot;程序性能, 记录10s</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">perf record -a -F <span class="m">999</span> -g -p <span class="m">17562</span>   sleep <span class="m">10</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>如果安装了 <code>speedscope</code> 工具， 我们可以直接在shell中调用</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">perf script -i perf.data <span class="p">|</span> speedscope -
-</code></pre></td></tr></table>
-</div>
-</div><p>这个命令会生成一个静态html文件，本地的话可以直接打开进入可视化页面。但笔者并没有这样做，因为笔者在公司服务器作了perf记录，静态html其实是生成了一个到<code>npm modules</code>的跳转，无法拉到本地的浏览器打开。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#ff79c6">select</span> <span style="color:#ff79c6">avg</span>(<span style="color:#8be9fd;font-style:italic">number</span>) <span style="color:#ff79c6">from</span> numbers(<span style="color:#bd93f9">1000000000</span>);
+</code></pre></div><p>使用 <code>perf</code> 工具&quot;记录&quot;程序性能, 记录10s</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">perf record -a -F <span style="color:#bd93f9">999</span> -g -p <span style="color:#bd93f9">17562</span>   sleep <span style="color:#bd93f9">10</span>
+</code></pre></div><p>如果安装了 <code>speedscope</code> 工具， 我们可以直接在shell中调用</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">perf script -i perf.data | speedscope -
+</code></pre></div><p>这个命令会生成一个静态html文件，本地的话可以直接打开进入可视化页面。但笔者并没有这样做，因为笔者在公司服务器作了perf记录，静态html其实是生成了一个到<code>npm modules</code>的跳转，无法拉到本地的浏览器打开。</p>
 <p>不过没事，我们可以将生成script拉到本地后,拖拽到 <code>https://www.speedscope.app/</code> 中打开。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">perf script -i perf.data &gt; profile.linux-perf.txt
-</code></pre></td></tr></table>
-</div>
-</div><p><img src="/images/speedscope1.png" alt="speedscope截图"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">perf script -i perf.data &gt; profile.linux-perf.txt
+</code></pre></div><p><img src="/images/speedscope1.png" alt="speedscope截图"></p>
 <p>进入页面后，我们可以非常直观地看到各个时间轴上的调用开销时间占用情况。上面截图中，可以反映出，10s内的采样中，有5.99s 耗在 <code>AggregateFunctionAvg</code> 函数中， 有 2.14s 耗在 <code>NumbersSource::generate</code> 生成中。</p>
 <p>使用 <code>Perf</code> 的方式，我们可以很直观得看到性能图，但我们并不能针对特定的SQL进行profile，下面介绍下 <code>clickhouse-speedscope</code> 如何针对特定SQL进行profile。</p>
 <h1 id="clickhouse-speedscope">clickhouse-speedscope</h1>
@@ -221,149 +186,77 @@
 <ul>
 <li>pip安装好依赖库后，我们首先开启下端口监听 8089端口，同时会转发 query_id 查询 服务器域名为ck001 的clickhouse-server</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">python  main.py --ch-host ck001 --proxy-port 8089
-</code></pre></td></tr></table>
-</div>
-</div><ul>
+<pre><code>python  main.py --ch-host ck001 --proxy-port 8089
+</code></pre><ul>
 <li>然后，我们在 clickhouse 层执行SQL，这里为了方便快速获取 query-id ，我们打开logs输出，以及打开函数抽样trace的开关</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">ubuntu</span> <span class="p">:)</span> <span class="k">set</span> <span class="n">send_logs_level</span> <span class="o">=</span> <span class="s1">&#39;trace&#39;</span><span class="p">;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">ubuntu :) <span style="color:#ff79c6">set</span> send_logs_level <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;trace&#39;</span>;
 
-<span class="k">SET</span> <span class="n">send_logs_level</span> <span class="o">=</span> <span class="s1">&#39;trace&#39;</span>
+<span style="color:#ff79c6">SET</span> send_logs_level <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;trace&#39;</span>
 
-<span class="n">Ok</span><span class="p">.</span>
+Ok.
 
-<span class="mi">0</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span><span class="p">.</span> <span class="n">Elapsed</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">021</span> <span class="n">sec</span><span class="p">.</span>
+<span style="color:#bd93f9">0</span> <span style="color:#ff79c6">rows</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span>. Elapsed: <span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">021</span> sec.
 
-<span class="n">ubuntu</span> <span class="p">:)</span> <span class="k">set</span> <span class="n">allow_introspection_functions</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+ubuntu :) <span style="color:#ff79c6">set</span> allow_introspection_functions  <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
 
-<span class="k">SET</span> <span class="n">allow_introspection_functions</span> <span class="o">=</span> <span class="mi">0</span>
+<span style="color:#ff79c6">SET</span> allow_introspection_functions <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
 
-<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">13</span><span class="p">.</span><span class="mi">061146</span> <span class="p">[</span> <span class="mi">17134</span> <span class="p">]</span> <span class="err">{</span><span class="n">d4a0c7af</span><span class="o">-</span><span class="n">c836</span><span class="o">-</span><span class="mi">4360</span><span class="o">-</span><span class="mi">8264</span><span class="o">-</span><span class="mi">926</span><span class="n">f634e1d94</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Debug</span><span class="o">&gt;</span> <span class="n">executeQuery</span><span class="p">:</span> <span class="p">(</span><span class="k">from</span> <span class="mi">127</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span><span class="mi">52012</span><span class="p">)</span> <span class="k">SET</span> <span class="n">allow_introspection_functions</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">13</span><span class="p">.</span><span class="mi">061471</span> <span class="p">[</span> <span class="mi">17134</span> <span class="p">]</span> <span class="err">{</span><span class="n">d4a0c7af</span><span class="o">-</span><span class="n">c836</span><span class="o">-</span><span class="mi">4360</span><span class="o">-</span><span class="mi">8264</span><span class="o">-</span><span class="mi">926</span><span class="n">f634e1d94</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Debug</span><span class="o">&gt;</span> <span class="n">MemoryTracker</span><span class="p">:</span> <span class="n">Peak</span> <span class="n">memory</span> <span class="k">usage</span> <span class="p">(</span><span class="k">for</span> <span class="n">query</span><span class="p">):</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">B</span><span class="p">.</span>
-<span class="n">Ok</span><span class="p">.</span>
+[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">02</span>:<span style="color:#bd93f9">13</span>.<span style="color:#bd93f9">061146</span> [ <span style="color:#bd93f9">17134</span> ] {d4a0c7af<span style="color:#ff79c6">-</span>c836<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4360</span><span style="color:#ff79c6">-</span><span style="color:#bd93f9">8264</span><span style="color:#ff79c6">-</span><span style="color:#bd93f9">926</span>f634e1d94} <span style="color:#ff79c6">&lt;</span>Debug<span style="color:#ff79c6">&gt;</span> executeQuery: (<span style="color:#ff79c6">from</span> <span style="color:#bd93f9">127</span>.<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">1</span>:<span style="color:#bd93f9">52012</span>) <span style="color:#ff79c6">SET</span> allow_introspection_functions <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">02</span>:<span style="color:#bd93f9">13</span>.<span style="color:#bd93f9">061471</span> [ <span style="color:#bd93f9">17134</span> ] {d4a0c7af<span style="color:#ff79c6">-</span>c836<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4360</span><span style="color:#ff79c6">-</span><span style="color:#bd93f9">8264</span><span style="color:#ff79c6">-</span><span style="color:#bd93f9">926</span>f634e1d94} <span style="color:#ff79c6">&lt;</span>Debug<span style="color:#ff79c6">&gt;</span> MemoryTracker: Peak memory <span style="color:#ff79c6">usage</span> (<span style="color:#ff79c6">for</span> query): <span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> B.
+Ok.
 
-<span class="mi">0</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span><span class="p">.</span> <span class="n">Elapsed</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">042</span> <span class="n">sec</span><span class="p">.</span>
-</code></pre></td></tr></table>
-</div>
-</div><ul>
+<span style="color:#bd93f9">0</span> <span style="color:#ff79c6">rows</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span>. Elapsed: <span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">042</span> sec.
+</code></pre></div><ul>
 <li>这里我们就可以看到具体日志了，然后我们继续执行那个”简单“且“复杂“的SQL （线上40core 128G服务器）</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">ubuntu</span> <span class="p">:)</span> <span class="k">select</span> <span class="k">avg</span><span class="p">(</span><span class="nb">number</span><span class="p">)</span> <span class="k">from</span> <span class="n">numbers</span><span class="p">(</span><span class="mi">1000000000</span><span class="p">);</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">ubuntu :) <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">avg</span>(<span style="color:#8be9fd;font-style:italic">number</span>) <span style="color:#ff79c6">from</span> numbers(<span style="color:#bd93f9">1000000000</span>);
 
-<span class="k">SELECT</span> <span class="k">avg</span><span class="p">(</span><span class="nb">number</span><span class="p">)</span>
-<span class="k">FROM</span> <span class="n">numbers</span><span class="p">(</span><span class="mi">1000000000</span><span class="p">)</span>
+<span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">avg</span>(<span style="color:#8be9fd;font-style:italic">number</span>)
+<span style="color:#ff79c6">FROM</span> numbers(<span style="color:#bd93f9">1000000000</span>)
 
-<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">58</span><span class="p">.</span><span class="mi">739452</span> <span class="p">[</span> <span class="mi">17134</span> <span class="p">]</span> <span class="err">{</span><span class="mi">6</span><span class="n">e4b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Debug</span><span class="o">&gt;</span> <span class="n">executeQuery</span><span class="p">:</span> <span class="p">(</span><span class="k">from</span> <span class="mi">127</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="p">:</span><span class="mi">52012</span><span class="p">)</span> <span class="k">SELECT</span> <span class="k">avg</span><span class="p">(</span><span class="nb">number</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">numbers</span><span class="p">(</span><span class="mi">1000000000</span><span class="p">)</span>
-<span class="err">→</span> <span class="n">Progress</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="k">rows</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">B</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="k">rows</span><span class="o">/</span><span class="n">s</span><span class="p">.,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">B</span><span class="o">/</span><span class="n">s</span><span class="p">.)</span> <span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">58</span><span class="p">.</span><span class="mi">739624</span> <span class="p">[</span> <span class="mi">17134</span> <span class="p">]</span> <span class="err">{</span><span class="mi">6</span><span class="n">e4b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Trace</span><span class="o">&gt;</span> <span class="n">AccessRightsContext</span> <span class="p">(</span><span class="k">default</span><span class="p">):</span> <span class="k">Access</span> <span class="k">granted</span><span class="p">:</span> <span class="n">numbers</span><span class="p">()</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span>
-<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">58</span><span class="p">.</span><span class="mi">739649</span> <span class="p">[</span> <span class="mi">17134</span> <span class="p">]</span> <span class="err">{</span><span class="mi">6</span><span class="n">e4b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Trace</span><span class="o">&gt;</span> <span class="n">AccessRightsContext</span> <span class="p">(</span><span class="k">default</span><span class="p">):</span> <span class="k">Access</span> <span class="k">granted</span><span class="p">:</span> <span class="n">numbers</span><span class="p">()</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span>
-<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">58</span><span class="p">.</span><span class="mi">747053</span> <span class="p">[</span> <span class="mi">17134</span> <span class="p">]</span> <span class="err">{</span><span class="mi">6</span><span class="n">e4b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Trace</span><span class="o">&gt;</span> <span class="n">InterpreterSelectQuery</span><span class="p">:</span> <span class="n">FetchColumns</span> <span class="o">-&gt;</span> <span class="n">Complete</span>
-<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">58</span><span class="p">.</span><span class="mi">747139</span> <span class="p">[</span> <span class="mi">17134</span> <span class="p">]</span> <span class="err">{</span><span class="mi">6</span><span class="n">e4b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Debug</span><span class="o">&gt;</span> <span class="n">executeQuery</span><span class="p">:</span> <span class="n">Query</span> <span class="n">pipeline</span><span class="p">:</span>
-<span class="n">Expression</span>
- <span class="n">Expression</span>
-  <span class="n">Aggregating</span>
-   <span class="n">Concat</span>
-    <span class="n">Expression</span>
-     <span class="n">TreeExecutor</span>
+[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">03</span>:<span style="color:#bd93f9">58</span>.<span style="color:#bd93f9">739452</span> [ <span style="color:#bd93f9">17134</span> ] {<span style="color:#bd93f9">6</span>e4b5384<span style="color:#ff79c6">-</span><span style="color:#bd93f9">39</span>c5<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>d02<span style="color:#ff79c6">-</span><span style="color:#bd93f9">9383</span><span style="color:#ff79c6">-</span>e312e92f2681} <span style="color:#ff79c6">&lt;</span>Debug<span style="color:#ff79c6">&gt;</span> executeQuery: (<span style="color:#ff79c6">from</span> <span style="color:#bd93f9">127</span>.<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">1</span>:<span style="color:#bd93f9">52012</span>) <span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">avg</span>(<span style="color:#8be9fd;font-style:italic">number</span>) <span style="color:#ff79c6">FROM</span> numbers(<span style="color:#bd93f9">1000000000</span>)
+→ Progress: <span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> <span style="color:#ff79c6">rows</span>, <span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> B (<span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> <span style="color:#ff79c6">rows</span><span style="color:#ff79c6">/</span>s., <span style="color:#bd93f9">0</span>.<span style="color:#bd93f9">00</span> B<span style="color:#ff79c6">/</span>s.) [ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">03</span>:<span style="color:#bd93f9">58</span>.<span style="color:#bd93f9">739624</span> [ <span style="color:#bd93f9">17134</span> ] {<span style="color:#bd93f9">6</span>e4b5384<span style="color:#ff79c6">-</span><span style="color:#bd93f9">39</span>c5<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>d02<span style="color:#ff79c6">-</span><span style="color:#bd93f9">9383</span><span style="color:#ff79c6">-</span>e312e92f2681} <span style="color:#ff79c6">&lt;</span>Trace<span style="color:#ff79c6">&gt;</span> AccessRightsContext (<span style="color:#ff79c6">default</span>): <span style="color:#ff79c6">Access</span> <span style="color:#ff79c6">granted</span>: numbers() <span style="color:#ff79c6">ON</span> <span style="color:#ff79c6">*</span>.<span style="color:#ff79c6">*</span>
+[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">03</span>:<span style="color:#bd93f9">58</span>.<span style="color:#bd93f9">739649</span> [ <span style="color:#bd93f9">17134</span> ] {<span style="color:#bd93f9">6</span>e4b5384<span style="color:#ff79c6">-</span><span style="color:#bd93f9">39</span>c5<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>d02<span style="color:#ff79c6">-</span><span style="color:#bd93f9">9383</span><span style="color:#ff79c6">-</span>e312e92f2681} <span style="color:#ff79c6">&lt;</span>Trace<span style="color:#ff79c6">&gt;</span> AccessRightsContext (<span style="color:#ff79c6">default</span>): <span style="color:#ff79c6">Access</span> <span style="color:#ff79c6">granted</span>: numbers() <span style="color:#ff79c6">ON</span> <span style="color:#ff79c6">*</span>.<span style="color:#ff79c6">*</span>
+[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">03</span>:<span style="color:#bd93f9">58</span>.<span style="color:#bd93f9">747053</span> [ <span style="color:#bd93f9">17134</span> ] {<span style="color:#bd93f9">6</span>e4b5384<span style="color:#ff79c6">-</span><span style="color:#bd93f9">39</span>c5<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>d02<span style="color:#ff79c6">-</span><span style="color:#bd93f9">9383</span><span style="color:#ff79c6">-</span>e312e92f2681} <span style="color:#ff79c6">&lt;</span>Trace<span style="color:#ff79c6">&gt;</span> InterpreterSelectQuery: FetchColumns <span style="color:#ff79c6">-&gt;</span> Complete
+[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">03</span>:<span style="color:#bd93f9">58</span>.<span style="color:#bd93f9">747139</span> [ <span style="color:#bd93f9">17134</span> ] {<span style="color:#bd93f9">6</span>e4b5384<span style="color:#ff79c6">-</span><span style="color:#bd93f9">39</span>c5<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>d02<span style="color:#ff79c6">-</span><span style="color:#bd93f9">9383</span><span style="color:#ff79c6">-</span>e312e92f2681} <span style="color:#ff79c6">&lt;</span>Debug<span style="color:#ff79c6">&gt;</span> executeQuery: Query pipeline:
+Expression
+ Expression
+  Aggregating
+   Concat
+    Expression
+     TreeExecutor
 
-<span class="err">↘</span> <span class="n">Progress</span><span class="p">:</span> <span class="mi">75</span><span class="p">.</span><span class="mi">96</span> <span class="n">million</span> <span class="k">rows</span><span class="p">,</span> <span class="mi">607</span><span class="p">.</span><span class="mi">65</span> <span class="n">MB</span> <span class="p">(</span><span class="mi">699</span><span class="p">.</span><span class="mi">98</span> <span class="n">million</span> <span class="k">rows</span><span class="o">/</span><span class="n">s</span><span class="p">.,</span> <span class="mi">5</span><span class="p">.</span><span class="mi">60</span> <span class="n">GB</span><span class="o">/</span><span class="n">s</span><span class="p">.)</span>  <span class="mi">7</span><span class="o">%</span><span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">58</span><span class="p">.</span><span class="mi">747262</span> <span class="p">[</span> <span class="mi">28335</span> <span class="p">]</span> <span class="err">{</span><span class="mi">6</span><span class="n">e4b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Trace</span><span class="o">&gt;</span> <span class="n">Aggregator</span><span class="p">:</span> <span class="n">Aggregating</span>
-<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">58</span><span class="p">.</span><span class="mi">747377</span> <span class="p">[</span> <span class="mi">28335</span> <span class="p">]</span> <span class="err">{</span><span class="mi">6</span><span class="n">e4b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Trace</span><span class="o">&gt;</span> <span class="n">Aggregator</span><span class="p">:</span> <span class="n">Aggregation</span> <span class="k">method</span><span class="p">:</span> <span class="n">without_key</span>
+↘ Progress: <span style="color:#bd93f9">75</span>.<span style="color:#bd93f9">96</span> million <span style="color:#ff79c6">rows</span>, <span style="color:#bd93f9">607</span>.<span style="color:#bd93f9">65</span> MB (<span style="color:#bd93f9">699</span>.<span style="color:#bd93f9">98</span> million <span style="color:#ff79c6">rows</span><span style="color:#ff79c6">/</span>s., <span style="color:#bd93f9">5</span>.<span style="color:#bd93f9">60</span> GB<span style="color:#ff79c6">/</span>s.)  <span style="color:#bd93f9">7</span><span style="color:#ff79c6">%</span>[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">03</span>:<span style="color:#bd93f9">58</span>.<span style="color:#bd93f9">747262</span> [ <span style="color:#bd93f9">28335</span> ] {<span style="color:#bd93f9">6</span>e4b5384<span style="color:#ff79c6">-</span><span style="color:#bd93f9">39</span>c5<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>d02<span style="color:#ff79c6">-</span><span style="color:#bd93f9">9383</span><span style="color:#ff79c6">-</span>e312e92f2681} <span style="color:#ff79c6">&lt;</span>Trace<span style="color:#ff79c6">&gt;</span> Aggregator: Aggregating
+[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">03</span>:<span style="color:#bd93f9">58</span>.<span style="color:#bd93f9">747377</span> [ <span style="color:#bd93f9">28335</span> ] {<span style="color:#bd93f9">6</span>e4b5384<span style="color:#ff79c6">-</span><span style="color:#bd93f9">39</span>c5<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>d02<span style="color:#ff79c6">-</span><span style="color:#bd93f9">9383</span><span style="color:#ff79c6">-</span>e312e92f2681} <span style="color:#ff79c6">&lt;</span>Trace<span style="color:#ff79c6">&gt;</span> Aggregator: Aggregation <span style="color:#ff79c6">method</span>: without_key
 
-<span class="err">┌─</span><span class="k">avg</span><span class="p">(</span><span class="nb">number</span><span class="p">)</span><span class="err">─┐</span>
-<span class="err">│</span> <span class="mi">499999999</span><span class="p">.</span><span class="mi">5</span> <span class="err">│</span>
-<span class="err">└─────────────┘</span>
-<span class="err">↖</span> <span class="n">Progress</span><span class="p">:</span> <span class="mi">951</span><span class="p">.</span><span class="mi">06</span> <span class="n">million</span> <span class="k">rows</span><span class="p">,</span> <span class="mi">7</span><span class="p">.</span><span class="mi">61</span> <span class="n">GB</span> <span class="p">(</span><span class="mi">746</span><span class="p">.</span><span class="mi">09</span> <span class="n">million</span> <span class="k">rows</span><span class="o">/</span><span class="n">s</span><span class="p">.,</span> <span class="mi">5</span><span class="p">.</span><span class="mi">97</span> <span class="n">GB</span><span class="o">/</span><span class="n">s</span><span class="p">.)</span> <span class="err">█████████████████████████████████████████████████████▎</span>   <span class="mi">94</span><span class="o">%</span><span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mi">00</span><span class="p">.</span><span class="mi">013119</span> <span class="p">[</span> <span class="mi">28335</span> <span class="p">]</span> <span class="err">{</span><span class="mi">6</span><span class="n">e4b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Trace</span><span class="o">&gt;</span> <span class="n">Aggregator</span><span class="p">:</span> <span class="n">Aggregated</span><span class="p">.</span> <span class="mi">1000000000</span> <span class="k">to</span> <span class="mi">1</span> <span class="k">rows</span> <span class="p">(</span><span class="k">from</span> <span class="mi">7629</span><span class="p">.</span><span class="mi">395</span> <span class="n">MiB</span><span class="p">)</span> <span class="k">in</span> <span class="mi">1</span><span class="p">.</span><span class="mi">266</span> <span class="n">sec</span><span class="p">.</span> <span class="p">(</span><span class="mi">790016853</span><span class="p">.</span><span class="mi">437</span> <span class="k">rows</span><span class="o">/</span><span class="n">sec</span><span class="p">.,</span> <span class="mi">6027</span><span class="p">.</span><span class="mi">350</span> <span class="n">MiB</span><span class="o">/</span><span class="n">sec</span><span class="p">.)</span>
-<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mi">00</span><span class="p">.</span><span class="mi">013271</span> <span class="p">[</span> <span class="mi">28335</span> <span class="p">]</span> <span class="err">{</span><span class="mi">6</span><span class="n">e4b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Trace</span><span class="o">&gt;</span> <span class="n">Aggregator</span><span class="p">:</span> <span class="n">Merging</span> <span class="n">aggregated</span> <span class="k">data</span>
-<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mi">00</span><span class="p">.</span><span class="mi">013537</span> <span class="p">[</span> <span class="mi">17134</span> <span class="p">]</span> <span class="err">{</span><span class="mi">6</span><span class="n">e4b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Information</span><span class="o">&gt;</span> <span class="n">executeQuery</span><span class="p">:</span> <span class="k">Read</span> <span class="mi">1000013824</span> <span class="k">rows</span><span class="p">,</span> <span class="mi">7</span><span class="p">.</span><span class="mi">45</span> <span class="n">GiB</span> <span class="k">in</span> <span class="mi">1</span><span class="p">.</span><span class="mi">274</span> <span class="n">sec</span><span class="p">.,</span> <span class="mi">784921953</span> <span class="k">rows</span><span class="o">/</span><span class="n">sec</span><span class="p">.,</span> <span class="mi">5</span><span class="p">.</span><span class="mi">85</span> <span class="n">GiB</span><span class="o">/</span><span class="n">sec</span><span class="p">.</span>
-<span class="p">[</span><span class="n">ubuntu</span><span class="p">]</span> <span class="mi">2020</span><span class="p">.</span><span class="mi">09</span><span class="p">.</span><span class="mi">11</span> <span class="mi">23</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mi">00</span><span class="p">.</span><span class="mi">013576</span> <span class="p">[</span> <span class="mi">17134</span> <span class="p">]</span> <span class="err">{</span><span class="mi">6</span><span class="n">e4b5384</span><span class="o">-</span><span class="mi">39</span><span class="n">c5</span><span class="o">-</span><span class="mi">4</span><span class="n">d02</span><span class="o">-</span><span class="mi">9383</span><span class="o">-</span><span class="n">e312e92f2681</span><span class="err">}</span> <span class="o">&lt;</span><span class="n">Debug</span><span class="o">&gt;</span> <span class="n">MemoryTracker</span><span class="p">:</span> <span class="n">Peak</span> <span class="n">memory</span> <span class="k">usage</span> <span class="p">(</span><span class="k">for</span> <span class="n">query</span><span class="p">):</span> <span class="mi">137</span><span class="p">.</span><span class="mi">09</span> <span class="n">KiB</span><span class="p">.</span>
+┌─<span style="color:#ff79c6">avg</span>(<span style="color:#8be9fd;font-style:italic">number</span>)─┐
+│ <span style="color:#bd93f9">499999999</span>.<span style="color:#bd93f9">5</span> │
+└─────────────┘
+↖ Progress: <span style="color:#bd93f9">951</span>.<span style="color:#bd93f9">06</span> million <span style="color:#ff79c6">rows</span>, <span style="color:#bd93f9">7</span>.<span style="color:#bd93f9">61</span> GB (<span style="color:#bd93f9">746</span>.<span style="color:#bd93f9">09</span> million <span style="color:#ff79c6">rows</span><span style="color:#ff79c6">/</span>s., <span style="color:#bd93f9">5</span>.<span style="color:#bd93f9">97</span> GB<span style="color:#ff79c6">/</span>s.) █████████████████████████████████████████████████████▎   <span style="color:#bd93f9">94</span><span style="color:#ff79c6">%</span>[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">04</span>:<span style="color:#bd93f9">00</span>.<span style="color:#bd93f9">013119</span> [ <span style="color:#bd93f9">28335</span> ] {<span style="color:#bd93f9">6</span>e4b5384<span style="color:#ff79c6">-</span><span style="color:#bd93f9">39</span>c5<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>d02<span style="color:#ff79c6">-</span><span style="color:#bd93f9">9383</span><span style="color:#ff79c6">-</span>e312e92f2681} <span style="color:#ff79c6">&lt;</span>Trace<span style="color:#ff79c6">&gt;</span> Aggregator: Aggregated. <span style="color:#bd93f9">1000000000</span> <span style="color:#ff79c6">to</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">rows</span> (<span style="color:#ff79c6">from</span> <span style="color:#bd93f9">7629</span>.<span style="color:#bd93f9">395</span> MiB) <span style="color:#ff79c6">in</span> <span style="color:#bd93f9">1</span>.<span style="color:#bd93f9">266</span> sec. (<span style="color:#bd93f9">790016853</span>.<span style="color:#bd93f9">437</span> <span style="color:#ff79c6">rows</span><span style="color:#ff79c6">/</span>sec., <span style="color:#bd93f9">6027</span>.<span style="color:#bd93f9">350</span> MiB<span style="color:#ff79c6">/</span>sec.)
+[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">04</span>:<span style="color:#bd93f9">00</span>.<span style="color:#bd93f9">013271</span> [ <span style="color:#bd93f9">28335</span> ] {<span style="color:#bd93f9">6</span>e4b5384<span style="color:#ff79c6">-</span><span style="color:#bd93f9">39</span>c5<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>d02<span style="color:#ff79c6">-</span><span style="color:#bd93f9">9383</span><span style="color:#ff79c6">-</span>e312e92f2681} <span style="color:#ff79c6">&lt;</span>Trace<span style="color:#ff79c6">&gt;</span> Aggregator: Merging aggregated <span style="color:#ff79c6">data</span>
+[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">04</span>:<span style="color:#bd93f9">00</span>.<span style="color:#bd93f9">013537</span> [ <span style="color:#bd93f9">17134</span> ] {<span style="color:#bd93f9">6</span>e4b5384<span style="color:#ff79c6">-</span><span style="color:#bd93f9">39</span>c5<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>d02<span style="color:#ff79c6">-</span><span style="color:#bd93f9">9383</span><span style="color:#ff79c6">-</span>e312e92f2681} <span style="color:#ff79c6">&lt;</span>Information<span style="color:#ff79c6">&gt;</span> executeQuery: <span style="color:#ff79c6">Read</span> <span style="color:#bd93f9">1000013824</span> <span style="color:#ff79c6">rows</span>, <span style="color:#bd93f9">7</span>.<span style="color:#bd93f9">45</span> GiB <span style="color:#ff79c6">in</span> <span style="color:#bd93f9">1</span>.<span style="color:#bd93f9">274</span> sec., <span style="color:#bd93f9">784921953</span> <span style="color:#ff79c6">rows</span><span style="color:#ff79c6">/</span>sec., <span style="color:#bd93f9">5</span>.<span style="color:#bd93f9">85</span> GiB<span style="color:#ff79c6">/</span>sec.
+[ubuntu] <span style="color:#bd93f9">2020</span>.<span style="color:#bd93f9">09</span>.<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">23</span>:<span style="color:#bd93f9">04</span>:<span style="color:#bd93f9">00</span>.<span style="color:#bd93f9">013576</span> [ <span style="color:#bd93f9">17134</span> ] {<span style="color:#bd93f9">6</span>e4b5384<span style="color:#ff79c6">-</span><span style="color:#bd93f9">39</span>c5<span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>d02<span style="color:#ff79c6">-</span><span style="color:#bd93f9">9383</span><span style="color:#ff79c6">-</span>e312e92f2681} <span style="color:#ff79c6">&lt;</span>Debug<span style="color:#ff79c6">&gt;</span> MemoryTracker: Peak memory <span style="color:#ff79c6">usage</span> (<span style="color:#ff79c6">for</span> query): <span style="color:#bd93f9">137</span>.<span style="color:#bd93f9">09</span> KiB.
 
-<span class="mi">1</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span><span class="p">.</span> <span class="n">Elapsed</span><span class="p">:</span> <span class="mi">1</span><span class="p">.</span><span class="mi">275</span> <span class="n">sec</span><span class="p">.</span> <span class="n">Processed</span> <span class="mi">1</span><span class="p">.</span><span class="mi">00</span> <span class="n">billion</span> <span class="k">rows</span><span class="p">,</span> <span class="mi">8</span><span class="p">.</span><span class="mi">00</span> <span class="n">GB</span> <span class="p">(</span><span class="mi">784</span><span class="p">.</span><span class="mi">34</span> <span class="n">million</span> <span class="k">rows</span><span class="o">/</span><span class="n">s</span><span class="p">.,</span> <span class="mi">6</span><span class="p">.</span><span class="mi">27</span> <span class="n">GB</span><span class="o">/</span><span class="n">s</span><span class="p">.)</span>
-</code></pre></td></tr></table>
-</div>
-</div><ul>
+<span style="color:#bd93f9">1</span> <span style="color:#ff79c6">rows</span> <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">set</span>. Elapsed: <span style="color:#bd93f9">1</span>.<span style="color:#bd93f9">275</span> sec. Processed <span style="color:#bd93f9">1</span>.<span style="color:#bd93f9">00</span> billion <span style="color:#ff79c6">rows</span>, <span style="color:#bd93f9">8</span>.<span style="color:#bd93f9">00</span> GB (<span style="color:#bd93f9">784</span>.<span style="color:#bd93f9">34</span> million <span style="color:#ff79c6">rows</span><span style="color:#ff79c6">/</span>s., <span style="color:#bd93f9">6</span>.<span style="color:#bd93f9">27</span> GB<span style="color:#ff79c6">/</span>s.)
+</code></pre></div><ul>
 <li>拿到了query-id，之后，我们通过 curl 可以直接获取到traceing的结果。</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">curl <span class="s1">&#39;http://localhost:8089/query?query_id=fe9078cd-9570-4895-b328-4728a097306a&#39;</span> <span class="p">|</span> speedscope -
-</code></pre></td></tr></table>
-</div>
-</div><ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl <span style="color:#f1fa8c">&#39;http://localhost:8089/query?query_id=fe9078cd-9570-4895-b328-4728a097306a&#39;</span> | speedscope -
+</code></pre></div><ul>
 <li>如果没有装 <code>speedscope</code>， 也可以重定向到一个文件中，然后拖拽到 <code>https://www.speedscope.app/</code> 中。</li>
 </ul>
 <h1 id="总结">总结</h1>
-<p>使用 <code>speedscope</code>， 我们在本地就可以很方便地进行远程profile，去试试吧！</p>
+<p>使用 <code>speedscope</code>， 我们在本地就可以很方便地对 <code>ClickHouse</code> 进行远程 <code>profile</code>，去试试吧！</p>
     </div>
 
     <div class="post-copyright">
   <p class="copyright-item">
-    <span class="item-title">Author</span>
+    <span class="item-title">文章作者</span>
     <span class="item-content">sundy-li</span>
   </p>
   <p class="copyright-item">
-    <span class="item-title">LastMod</span>
+    <span class="item-title">上次更新</span>
     <span class="item-content">
         2020-09-11
         
@@ -378,7 +271,7 @@
         
         <a class="next" href="/post/%E5%8D%9A%E5%AE%A2%E5%BC%80%E5%9D%91%E8%AE%B0/">
             <span class="next-text nav-default">博客开坑记</span>
-            <span class="next-text nav-mobile">Next</span>
+            <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
       </nav>
@@ -397,8 +290,8 @@
         owner: 'sundy-li',
         repo: 'sundy-li.github.io',
         oauth: {
-          client_id: 'abd3a14fb45a362f4c5e',
-          client_secret: '14ab1de0c55eec948dfc1228d1fa08c2dcb4ac81'
+          client_id: 'ec65a8719513fe7b4d9a',
+          client_secret: '5b43d6e7f7b971b4ee51e9417332acf93c4165ec'
         }
       });
       gitment.render('comments-gitment');
@@ -420,19 +313,19 @@
 
 <div class="copyright">
   <span class="power-by">
-    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    Theme - 
+    主题 -
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
   
 
   <span class="copyright-year">
-    &copy; 
-    2017 - 
+    &copy;
+    2017 -
     2020<span class="heart"><i class="iconfont icon-heart"></i></span><span>sundy-li</span>
   </span>
 </div>
@@ -443,7 +336,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
+  <script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
