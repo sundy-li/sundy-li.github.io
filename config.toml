@@ -1,0 +1,143 @@
+baseURL = "http://example.org/"
+# [en, zh-cn, fr, ...] 设置默认的语言
+defaultContentLanguage = "zh-cn"
+# 网站语言, 仅在这里 CN 大写
+languageCode = "zh-CN"
+# 是否包括中日韩文字
+hasCJKLanguage = true
+# 网站标题
+title = "sundy-li的博客"
+
+# 更改使用 Hugo 构建网站时使用的默认主题
+theme = "LoveIt"
+
+[params]
+   # LoveIt 更改 | 0.2.0 LoveIt 主题版本
+  version = "0.2.X"
+  # 网站描述
+  description = "sundy-li写东西的地方"
+  # 网站关键词
+  keywords = ["sundy-li", "blog"]
+  # 网站默认主题样式 ("light", "dark", "auto")
+  defaultTheme = "auto"
+  # 公共 git 仓库路径，仅在 enableGitInfo 设为 true 时有效
+  gitRepo = "git@github.com:sundy-li/blog.git"
+  # ("sha256", "sha384", "sha512", "md5")
+  fingerprint = "sha256"
+  # LoveIt 新增 | 0.2.0 日期格式
+  dateFormat = "2006-01-02"
+  # 网站图片, 用于 Open Graph 和 Twitter Cards
+  images = ["/logo.png"]
+
+    # LoveIt 新增 | 0.2.0 搜索配置
+  [params.search]
+    enable = true
+    # 搜索引擎的类型 ("lunr", "algolia")
+    type = "lunr"
+    # 文章内容最长索引长度
+    contentLength = 4000
+    # 搜索框的占位提示语
+    placeholder = ""
+    # LoveIt 新增 | 0.2.1 最大结果数目
+    maxResultLength = 10
+    # LoveIt 新增 | 0.2.3 结果内容片段长度
+    snippetLength = 50
+    # LoveIt 新增 | 0.2.1 搜索结果中高亮部分的 HTML 标签
+    highlightTag = "em"
+    # LoveIt 新增 | 0.2.4 是否在搜索索引中使用基于 baseURL 的绝对路径
+    absoluteURL = false
+    [params.search.algolia]
+      index = ""
+      appID = ""
+      searchKey = ""
+
+ # 主页配置
+  [params.home]
+    # LoveIt 新增 | 0.2.0 RSS 文章数目
+    rss = 10
+    # 主页个人信息
+    [params.home.profile]
+      enable = true
+      # Gravatar 邮箱，用于优先在主页显示的头像
+      gravatarEmail = ""
+      # 主页显示头像的 URL
+      avatarURL = "/images/avatar.jpeg"
+      # LoveIt 更改 | 0.2.7 主页显示的网站标题 (支持 HTML 格式)
+      title = ""
+      # 主页显示的网站副标题
+      subtitle = "欢迎来到我的个人博客"
+      # 是否为副标题显示打字机动画
+      typeit = true
+      # 是否显示社交账号
+      social = true
+      # LoveIt 新增 | 0.2.0 免责声明 (支持 HTML 格式)
+      disclaimer = ""
+    # 主页文章列表
+    [params.home.posts]
+      enable = true
+      # 主页每页显示文章数量
+      paginate = 6
+      # LoveIt 删除 | 0.2.0 被 params.page 中的 hiddenFromHomePage 替代
+      # 当你没有在文章前置参数中设置 "hiddenFromHomePage" 时的默认行为
+      defaultHiddenFromHomePage = false
+
+  # 作者的社交信息设置
+  [params.social]
+    GitHub = "sundy-li"
+    Zhihu = "sundyli"
+
+  [params.page.code]
+  # 是否显示代码块的复制按钮
+    copy = true
+    # 默认展开显示的代码行数
+    maxShownLines = 100
+
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    # 你可以在名称 (允许 HTML 格式) 之前添加其他信息, 例如图标
+    pre = ""
+    # 你可以在名称 (允许 HTML 格式) 之后添加其他信息, 例如图标
+    post = ""
+    name = "文章"
+    url = "/posts/"
+    # 当你将鼠标悬停在此菜单链接上时, 将显示的标题
+    title = ""
+    weight = 1
+  [[menu.main]]
+    identifier = "tags"
+    pre = ""
+    post = ""
+    name = "标签"
+    url = "/tags/"
+    title = ""
+    weight = 2
+  [[menu.main]]
+    identifier = "categories"
+    pre = ""
+    post = ""
+    name = "分类"
+    url = "/categories/"
+    title = ""
+    weight = 3
+  [[menu.main]]
+    identifier = "about"
+    pre = ""
+    post = ""
+    name = "关于我"
+    url = "/about/"
+    title = ""
+    weight = 4
+
+# Hugo 解析文档的配置
+[markup]
+  # 语法高亮设置 (https://gohugo.io/content-management/syntax-highlighting)
+  [markup.highlight]
+    # false 是必要的设置 (https://github.com/dillonzq/LoveIt/issues/158)
+    noClasses = false
+
+# 作者配置
+[author]
+  name = "sundy-li"
+  email = ""
+  link = "http://github.com/sundy-li"
