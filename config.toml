@@ -98,6 +98,7 @@ theme = "LoveIt"
      [params.page.comment.gitalk]
        enable = true
        owner = "sundy-li"
+       admin = ["sundy-li"]
        repo = "sundy-li.github.io"
 
        # not safe, todo
