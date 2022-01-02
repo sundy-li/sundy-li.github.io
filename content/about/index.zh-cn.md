@@ -11,7 +11,7 @@ math:
 
 中年90后程序员，江西赣州人士，毕业于中山大学。
 
-常用网名[sundy-li](https://github.com/sundy-li/), 目前在[datafuselabs](https://github.com/datafuselabs) 工作，专注研究实时云原生数仓。
+常用网名[sundy-li](https://github.com/sundy-li/), 曾就职于虎牙 & bigo，目前在[datafuselabs](https://github.com/datafuselabs) 工作，专注研究实时云原生数仓，GitHub 远程工作中。
 
 博客模板来自于[Hugo 主题 LoveIt](https://github.com/dillonzq/LoveIt)
 

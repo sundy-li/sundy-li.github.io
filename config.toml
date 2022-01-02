@@ -19,7 +19,7 @@ theme = "LoveIt"
   # 网站关键词
   keywords = ["sundy-li", "blog"]
   # 网站默认主题样式 ("light", "dark", "auto")
-  defaultTheme = "auto"
+  defaultTheme = "light"
   # 公共 git 仓库路径，仅在 enableGitInfo 设为 true 时有效
   gitRepo = "git@github.com:sundy-li/blog.git"
   # ("sha256", "sha384", "sha512", "md5")
