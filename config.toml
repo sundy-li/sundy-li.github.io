@@ -101,15 +101,14 @@ theme = "LoveIt"
        repo = "sundy-li.github.io"
 
        # not safe, todo
-       clientId = "8258fdc1a34012228cc8"
-       clientSecret = "4d472e88699e2b5ffd38e39ccae6b8f02b92afc2"
+       clientId = "0bbabc78136bab58c4d5"
+       clientSecret = "c815c82bf780c7bd3d4745303fa96f2c2b455dd7"
 
 [menu]
   [[menu.main]]
     identifier = "posts"
     # 你可以在名称 (允许 HTML 格式) 之前添加其他信息, 例如图标
     pre = ""
-    # 你可以在名称 (允许 HTML 格式) 之后添加其他信息, 例如图标
     post = ""
     name = "文章"
     url = "/posts/"
@@ -151,7 +150,7 @@ theme = "LoveIt"
 # 作者配置
 [author]
   name = "sundy-li"
-  email = ""
+  email = "543950155@qq.com"
   link = "http://github.com/sundy-li"
 
 [outputs]
