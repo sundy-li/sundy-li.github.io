@@ -101,8 +101,8 @@ theme = "LoveIt"
        repo = "sundy-li.github.io"
 
        # not safe, todo
-       clientId = "ec65a8719513fe7b4d9a"
-       clientSecret = "5b43d6e7f7b971b4ee51e9417332acf93c4165ec"
+       clientId = "8258fdc1a34012228cc8"
+       clientSecret = "4d472e88699e2b5ffd38e39ccae6b8f02b92afc2"
 
 [menu]
   [[menu.main]]
