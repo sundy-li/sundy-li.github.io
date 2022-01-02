@@ -103,7 +103,7 @@ theme = "LoveIt"
 
        # not safe, todo
        clientId = "0bbabc78136bab58c4d5"
-       clientSecret = "c815c82bf780c7bd3d4745303fa96f2c2b455dd7"
+       clientSecret = "944414617574f7803ac3b687931e677c371901be"
 
 [menu]
   [[menu.main]]
