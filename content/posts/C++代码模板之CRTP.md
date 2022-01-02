@@ -45,7 +45,7 @@ public:
 奇异递归模板模式(Curiously Recurring Template Pattern，CRTP)，CRTP是C++模板编程时的一种常见技巧（idiom）：把派生类作为基类的模板参数。更一般地被称作F-bound polymorphism，是一类F 界量化。
 
 
-- CRTP 的基本范式
+### CRTP 的基本范式
 
 ```c++
 template <typename T>
@@ -75,13 +75,13 @@ public:
 };
 ```
 
-- 静态动态
+### 静态动态
 
 Andrei Alexandrescu在Modern C++ Design中称 CRTP 为静态多态（static polymorphism）。
 
 相比于普通继承方式实现的多台，CRTP可以在编译器实现类型的绑定，这种方式实现了虚函数的效果，同时也避免了动态多态的代价。
 
-- 权限控制
+### 权限控制
 
 为了让基类能访问派生类的私有成员或方法，我们可以在派生类中和基类成为友元类。
 
@@ -89,7 +89,7 @@ Andrei Alexandrescu在Modern C++ Design中称 CRTP 为静态多态（static poly
 friend class Base<Derived>;
 ```
 
-- std::enable_shared_from_this
+### std::enable_shared_from_this
 
 假如在c++中想要在一个已被shareptr管理的类型对象内获取并返回this，为了防止被管理的对象已被智能指针释放，而导致this成为悬空指针，可能会考虑以share_ptr的形式返回this指针，我们可以使用 std::enable_shared_from_this， 它本身就是一种CRTP在标准库中的实现
 
@@ -103,7 +103,7 @@ struct FOO: std::enable_shared_from_this<FOO>
 ```
 
 
-- CRTP 示例 (来自clickhouse源码)
+### CRTP 示例 (来自clickhouse源码)
 
 ```cpp
 

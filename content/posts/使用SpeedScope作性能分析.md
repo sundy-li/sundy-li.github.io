@@ -9,18 +9,18 @@ categories: ["ClickHouse"]
 ![flamegraph](/images/cpu-bash-flamegraph.svg)
 <!--more-->
 
-# 前言
+## 前言
 如果要按工具链友好度评选一门最佳语言，我会首选 Golang，因为它有一系列的`go tool`工具，面向开发者非常友好。
 
 其中`go tool pprof` 结合 `go-torch` ，能快速得出go程序的火焰图。在Linux系统中， `perf` 工具也十分强大，里面有各种子工具分析系统级进程的性能。`perf` 通常结合 `FlameGraph` 可以生成不错的火焰图。在一次偶然的机会中，笔者接触到了 `SpeedScope`，本文以调优 `ClickHouse` 为例子，介绍一下 `SpeedScope` 工具的使用。
 
 
-# SpeedScope 介绍
+## SpeedScope 介绍
 
 [SpeedScope](https://github.com/jlfwong/speedscope#usage) 是一款在线的 `flamegraph` 可视化工具。它可以和多个编程语言相结合，也可以将 `perf`  report的结果拖拽到网站里面在线分析。
 
 
-# 安装(可选)
+## 安装(可选)
 
 `speedscope` 是 nodejs 编写的，安装这个工具是可选的，安装后可以基于本地生成可视化性能图。
 
@@ -28,7 +28,7 @@ categories: ["ClickHouse"]
 sudo npm install -g speedscope
 ```
 
-# 使用
+## 使用
 
 > 我们在ClickHouse 里面执行一个”简单“且“复杂“的SQL的SQL，计算十亿个数的平均值。
 
@@ -62,7 +62,7 @@ perf script -i perf.data > profile.linux-perf.txt
 
 使用 `Perf` 的方式，我们可以很直观得看到性能图，但我们并不能针对特定的SQL进行profile，下面介绍下 `clickhouse-speedscope` 如何针对特定SQL进行profile。
 
-# clickhouse-speedscope
+## clickhouse-speedscope
 
 第一次接触到SpeedScope，是无意中看到了 [clickhouse-speedscope](https://github.com/laplab/clickhouse-speedscope) 项目。这个项目巧妙地利用了 clickhouse的系统表 `system.trace_log` 进行采样。
 
@@ -140,6 +140,6 @@ curl 'http://localhost:8089/query?query_id=fe9078cd-9570-4895-b328-4728a097306a'
 - 如果没有装 `speedscope`， 也可以重定向到一个文件中，然后拖拽到 `https://www.speedscope.app/` 中。
 
 
-# 总结
+## 总结
 
 使用 `speedscope`， 我们在本地就可以很方便地对 `ClickHouse` 进行远程 `profile`，去试试吧！
