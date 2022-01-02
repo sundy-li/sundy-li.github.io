@@ -1,0 +1,260 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>C++代码模板之CRTP - sundy-li的博客</title><meta name=Description content="sundy-li写东西的地方"><meta property="og:title" content="C++代码模板之CRTP">
+<meta property="og:description" content="本文将介绍一下c++代码模板的小技巧 &mdash;&ndash; CRTP 虚函数 在介绍 CRTP 之前，我们先来了解下虚函数。 虚函数是通过指向派生类的基类指针或引用，访问派生类中同名覆">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://example.org/posts/c++%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF%E4%B9%8Bcrtp/"><meta property="og:image" content="http://example.org/logo.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-01-28T19:43:47+08:00">
+<meta property="article:modified_time" content="2021-01-28T19:43:47+08:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://example.org/logo.png">
+<meta name=twitter:title content="C++代码模板之CRTP">
+<meta name=twitter:description content="本文将介绍一下c++代码模板的小技巧 &mdash;&ndash; CRTP 虚函数 在介绍 CRTP 之前，我们先来了解下虚函数。 虚函数是通过指向派生类的基类指针或引用，访问派生类中同名覆">
+<meta name=application-name content="sundy-li的博客">
+<meta name=apple-mobile-web-app-title content="sundy-li的博客"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://example.org/posts/c++%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF%E4%B9%8Bcrtp/><link rel=prev href=http://example.org/posts/%E4%BD%BF%E7%94%A8speedscope%E4%BD%9C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/><link rel=next href=http://example.org/posts/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%88%E5%BC%80%E5%A7%8B%E5%86%99%E5%8D%9A%E5%AE%A2%E4%BA%86/><link rel=stylesheet href=/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH+KuXHiZWODptY5K8NF4="><link rel=stylesheet href=/css/style.min.1e2694bed152fa2922dbe909a441838ed693d88b1330f97485bfa8ed78da42df.css integrity="sha256-HiaUvtFS+iki2+kJpEGDjtaT2IsTMPl0hb+o7XjaQt8="><link rel=stylesheet href=/lib/fontawesome-free/all.min.876d023d9d10c97941b80c3b03e2a5b94631ff7a4af9cee5604a6a2d39718d84.css integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="><link rel=stylesheet href=/lib/animate/animate.min.3c770e90f98eb21b0c042fafb49755af93306fbaf42e449524f94fae9fc83295.css integrity="sha256-PHcOkPmOshsMBC+vtJdVr5Mwb7r0LkSVJPlPrp/IMpU="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"C++代码模板之CRTP","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/example.org\/posts\/c\u002b\u002b%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF%E4%B9%8Bcrtp\/"},"genre":"posts","keywords":"Template","wordcount":1085,"url":"http:\/\/example.org\/posts\/c\u002b\u002b%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF%E4%B9%8Bcrtp\/","datePublished":"2021-01-28T19:43:47+08:00","dateModified":"2021-01-28T19:43:47+08:00","publisher":{"@type":"Organization","name":"sundy-li"},"author":{"@type":"Person","name":"sundy-li"},"description":""}</script></head>
+<body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title=sundy-li的博客>sundy-li的博客</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> 文章 </a><a class=menu-item href=/tags/> 标签 </a><a class=menu-item href=/categories/> 分类 </a><a class=menu-item href=/about/> 关于我 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title=sundy-li的博客>sundy-li的博客</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/about/ title>关于我</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">C++代码模板之CRTP</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=http://github.com/sundy-li title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>sundy-li</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/code/><i class="far fa-folder fa-fw"></i>Code</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-01-28>2021-01-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1085 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#虚函数>虚函数</a></li>
+<li><a href=#crtp>CRTP</a></li>
+<li><a href=#总结>总结</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><blockquote>
+<p>本文将介绍一下c++代码模板的小技巧 &mdash;&ndash; CRTP</p>
+</blockquote>
+<h2 id=虚函数>虚函数</h2>
+<blockquote>
+<p>在介绍 CRTP 之前，我们先来了解下虚函数。</p>
+</blockquote>
+<p>虚函数是通过指向派生类的基类指针或引用，访问派生类中同名覆盖成员函数，从而实现了多态的特性。</p>
+<p>一段简单的代码示例</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=k>class</span> <span class=nc>A</span>
+<span class=p>{</span>
+<span class=k>public</span><span class=o>:</span>
+	<span class=k>virtual</span> <span class=kt>void</span> <span class=n>print</span><span class=p>()</span>
+	<span class=p>{</span>
+		<span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;Hello from A&#34;</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+	<span class=p>}</span>
+<span class=p>};</span>
+
+<span class=k>class</span> <span class=nc>B</span> <span class=o>:</span> <span class=k>public</span> <span class=n>A</span>
+<span class=p>{</span>
+<span class=k>public</span><span class=o>:</span>
+	<span class=kt>void</span> <span class=n>print</span><span class=p>()</span> <span class=k>override</span>
+	<span class=p>{</span>
+		<span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;Hello from B&#34;</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+	<span class=p>}</span>
+<span class=p>};</span>
+</code></pre></div><p>虚函数实现了多态的特性，但是每次调用的时候都要对虚函数表进行 look-up, 所以开销不低，较之直接调用具体对象的方法，虚函数调用通常会慢一个数量级以上。在一些对性能敏感领域的软件系统中，比如OLAP数据库系统，需要对海量数据进行计算分析，虚函数的调用将会放大特别严重。</p>
+<h2 id=crtp>CRTP</h2>
+<p>奇异递归模板模式(Curiously Recurring Template Pattern，CRTP)，CRTP是C++模板编程时的一种常见技巧（idiom）：把派生类作为基类的模板参数。更一般地被称作F-bound polymorphism，是一类F 界量化。</p>
+<ul>
+<li>CRTP 的基本范式</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=k>template</span> <span class=o>&lt;</span><span class=k>typename</span> <span class=n>T</span><span class=o>&gt;</span>
+<span class=k>class</span> <span class=nc>Base</span>
+<span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>};</span>
+
+<span class=k>class</span> <span class=nc>Derived</span> <span class=o>:</span> <span class=k>public</span> <span class=n>Base</span><span class=o>&lt;</span><span class=n>Derived</span><span class=o>&gt;</span>
+<span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>};</span>
+</code></pre></div><p>这样做的目的在于在基类中使用派生类的方法，从基类的角度来看，派生类也是一个基类，基类可以通过static_cast将其转为派生类，从而静态使用派生类的成员和方法，如下：</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=k>template</span> <span class=o>&lt;</span><span class=k>typename</span> <span class=n>T</span><span class=o>&gt;</span>
+<span class=k>class</span> <span class=nc>Base</span>
+<span class=p>{</span>
+<span class=k>public</span><span class=o>:</span>
+    <span class=kt>void</span> <span class=n>doWhat</span><span class=p>()</span>
+    <span class=p>{</span>
+        <span class=n>T</span><span class=o>&amp;</span> <span class=n>derived</span> <span class=o>=</span> <span class=k>static_cast</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&amp;&gt;</span><span class=p>(</span><span class=o>*</span><span class=k>this</span><span class=p>);</span>
+        <span class=c1>// use derived...
+</span><span class=c1></span>    <span class=p>}</span>
+<span class=p>};</span>
+</code></pre></div><ul>
+<li>静态动态</li>
+</ul>
+<p>Andrei Alexandrescu在Modern C++ Design中称 CRTP 为静态多态（static polymorphism）。</p>
+<p>相比于普通继承方式实现的多台，CRTP可以在编译器实现类型的绑定，这种方式实现了虚函数的效果，同时也避免了动态多态的代价。</p>
+<ul>
+<li>权限控制</li>
+</ul>
+<p>为了让基类能访问派生类的私有成员或方法，我们可以在派生类中和基类成为友元类。</p>
+<pre tabindex=0><code>friend class Base&lt;Derived&gt;;
+</code></pre><ul>
+<li>std::enable_shared_from_this</li>
+</ul>
+<p>假如在c++中想要在一个已被shareptr管理的类型对象内获取并返回this，为了防止被管理的对象已被智能指针释放，而导致this成为悬空指针，可能会考虑以share_ptr的形式返回this指针，我们可以使用 std::enable_shared_from_this， 它本身就是一种CRTP在标准库中的实现</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=k>struct</span> <span class=nc>FOO</span><span class=o>:</span> <span class=n>std</span><span class=o>::</span><span class=n>enable_shared_from_this</span><span class=o>&lt;</span><span class=n>FOO</span><span class=o>&gt;</span>
+<span class=p>{</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>shared_ptr</span><span class=o>&lt;</span><span class=n>FOO</span><span class=o>&gt;</span> <span class=n>getptr</span><span class=p>()</span> <span class=p>{</span>
+        <span class=k>return</span> <span class=nf>shared_from_this</span><span class=p>();</span>
+    <span class=p>}</span>
+<span class=p>};</span>
+</code></pre></div><ul>
+<li>CRTP 示例 (来自clickhouse源码)</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp>
+<span class=c1>/// Implement method to obtain an address of &#39;add&#39; function.
+</span><span class=c1></span><span class=k>template</span> <span class=o>&lt;</span><span class=k>typename</span> <span class=n>Derived</span><span class=o>&gt;</span>
+<span class=k>class</span> <span class=nc>IAggregateFunctionHelper</span> <span class=o>:</span> <span class=k>public</span> <span class=n>IAggregateFunction</span>
+<span class=p>{</span>
+<span class=k>private</span><span class=o>:</span>
+    <span class=k>static</span> <span class=kt>void</span> <span class=n>addFree</span><span class=p>(</span><span class=k>const</span> <span class=n>IAggregateFunction</span> <span class=o>*</span> <span class=n>that</span><span class=p>,</span> <span class=n>AggregateDataPtr</span> <span class=n>place</span><span class=p>,</span> <span class=k>const</span> <span class=n>IColumn</span> <span class=o>**</span> <span class=n>columns</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>row_num</span><span class=p>,</span> <span class=n>Arena</span> <span class=o>*</span> <span class=n>arena</span><span class=p>)</span>
+    <span class=p>{</span>
+        <span class=k>static_cast</span><span class=o>&lt;</span><span class=k>const</span> <span class=n>Derived</span> <span class=o>&amp;&gt;</span><span class=p>(</span><span class=o>*</span><span class=n>that</span><span class=p>).</span><span class=n>add</span><span class=p>(</span><span class=n>place</span><span class=p>,</span> <span class=n>columns</span><span class=p>,</span> <span class=n>row_num</span><span class=p>,</span> <span class=n>arena</span><span class=p>);</span>
+    <span class=p>}</span>
+
+<span class=k>public</span><span class=o>:</span>
+    <span class=n>IAggregateFunctionHelper</span><span class=p>(</span><span class=k>const</span> <span class=n>DataTypes</span> <span class=o>&amp;</span> <span class=n>argument_types_</span><span class=p>,</span> <span class=k>const</span> <span class=n>Array</span> <span class=o>&amp;</span> <span class=n>parameters_</span><span class=p>)</span>
+        <span class=o>:</span> <span class=n>IAggregateFunction</span><span class=p>(</span><span class=n>argument_types_</span><span class=p>,</span> <span class=n>parameters_</span><span class=p>)</span> <span class=p>{}</span>
+
+    <span class=n>AddFunc</span> <span class=nf>getAddressOfAddFunction</span><span class=p>()</span> <span class=k>const</span> <span class=k>override</span> <span class=p>{</span> <span class=k>return</span> <span class=o>&amp;</span><span class=n>addFree</span><span class=p>;</span> <span class=p>}</span>
+
+    <span class=kt>void</span> <span class=nf>addBatch</span><span class=p>(</span><span class=n>size_t</span> <span class=n>batch_size</span><span class=p>,</span> <span class=n>AggregateDataPtr</span> <span class=o>*</span> <span class=n>places</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>place_offset</span><span class=p>,</span> <span class=k>const</span> <span class=n>IColumn</span> <span class=o>**</span> <span class=n>columns</span><span class=p>,</span> <span class=n>Arena</span> <span class=o>*</span> <span class=n>arena</span><span class=p>)</span> <span class=k>const</span> <span class=k>override</span>
+    <span class=p>{</span>
+        <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>batch_size</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span>
+            <span class=k>static_cast</span><span class=o>&lt;</span><span class=k>const</span> <span class=n>Derived</span> <span class=o>*&gt;</span><span class=p>(</span><span class=k>this</span><span class=p>)</span><span class=o>-&gt;</span><span class=n>add</span><span class=p>(</span><span class=n>places</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>+</span> <span class=n>place_offset</span><span class=p>,</span> <span class=n>columns</span><span class=p>,</span> <span class=n>i</span><span class=p>,</span> <span class=n>arena</span><span class=p>);</span>
+    <span class=p>}</span>
+
+    <span class=kt>void</span> <span class=nf>addBatchSinglePlace</span><span class=p>(</span><span class=n>size_t</span> <span class=n>batch_size</span><span class=p>,</span> <span class=n>AggregateDataPtr</span> <span class=n>place</span><span class=p>,</span> <span class=k>const</span> <span class=n>IColumn</span> <span class=o>**</span> <span class=n>columns</span><span class=p>,</span> <span class=n>Arena</span> <span class=o>*</span> <span class=n>arena</span><span class=p>)</span> <span class=k>const</span> <span class=k>override</span>
+    <span class=p>{</span>
+        <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>batch_size</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span>
+            <span class=k>static_cast</span><span class=o>&lt;</span><span class=k>const</span> <span class=n>Derived</span> <span class=o>*&gt;</span><span class=p>(</span><span class=k>this</span><span class=p>)</span><span class=o>-&gt;</span><span class=n>add</span><span class=p>(</span><span class=n>place</span><span class=p>,</span> <span class=n>columns</span><span class=p>,</span> <span class=n>i</span><span class=p>,</span> <span class=n>arena</span><span class=p>);</span>
+    <span class=p>}</span>
+
+    <span class=kt>void</span> <span class=nf>addBatchArray</span><span class=p>(</span>
+        <span class=n>size_t</span> <span class=n>batch_size</span><span class=p>,</span> <span class=n>AggregateDataPtr</span> <span class=o>*</span> <span class=n>places</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>place_offset</span><span class=p>,</span> <span class=k>const</span> <span class=n>IColumn</span> <span class=o>**</span> <span class=n>columns</span><span class=p>,</span> <span class=k>const</span> <span class=n>UInt64</span> <span class=o>*</span> <span class=n>offsets</span><span class=p>,</span> <span class=n>Arena</span> <span class=o>*</span> <span class=n>arena</span><span class=p>)</span>
+        <span class=k>const</span> <span class=k>override</span>
+    <span class=p>{</span>
+        <span class=n>size_t</span> <span class=n>current_offset</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+        <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>batch_size</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span>
+        <span class=p>{</span>
+            <span class=n>size_t</span> <span class=n>next_offset</span> <span class=o>=</span> <span class=n>offsets</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+            <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=n>current_offset</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>next_offset</span><span class=p>;</span> <span class=o>++</span><span class=n>j</span><span class=p>)</span>
+                <span class=k>static_cast</span><span class=o>&lt;</span><span class=k>const</span> <span class=n>Derived</span> <span class=o>*&gt;</span><span class=p>(</span><span class=k>this</span><span class=p>)</span><span class=o>-&gt;</span><span class=n>add</span><span class=p>(</span><span class=n>places</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>+</span> <span class=n>place_offset</span><span class=p>,</span> <span class=n>columns</span><span class=p>,</span> <span class=n>j</span><span class=p>,</span> <span class=n>arena</span><span class=p>);</span>
+            <span class=n>current_offset</span> <span class=o>=</span> <span class=n>next_offset</span><span class=p>;</span>
+        <span class=p>}</span>
+    <span class=p>}</span>
+<span class=p>};</span>
+
+</code></pre></div><h2 id=总结>总结</h2>
+<p>如果想在编译期确定通过基类来得到派生类的行为，CRTP便是一种绝佳的选择， :)</p>
+</div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2021-01-28</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/template/>Template</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span>
+</section>
+</div>
+<div class=post-nav><a href=/posts/%E4%BD%BF%E7%94%A8speedscope%E4%BD%9C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/ class=prev rel=prev title=使用SpeedScope作性能分析><i class="fas fa-angle-left fa-fw"></i>使用SpeedScope作性能分析</a>
+<a href=/posts/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%88%E5%BC%80%E5%A7%8B%E5%86%99%E5%8D%9A%E5%AE%A2%E4%BA%86/ class=next rel=next title=2022年，我为什么又开始写博客了>2022年，我为什么又开始写博客了<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=http://github.com/sundy-li target=_blank>sundy-li</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.bcff85fb5e00d68802850b393ac7792c997f722f536f38e26638c46dca8e5eb6.js integrity="sha256-vP+F+14A1ogChQs5Osd5LJl/ci9TbzjiZjjEbcqOXrY="></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.615590a2ca2b667afa7c02ef396f5500b62e22795ddbb46448f90494605d09a5.js integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU="></script><script type=text/javascript src=/lib/lunr/lunr.min.df84a2d58ea594c04a3371b48d020b55ea10284c2ec636e4e331965d7313e29b.js integrity="sha256-34Si1Y6llMBKM3G0jQILVeoQKEwuxjbk4zGWXXMT4ps="></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.115461812ca5b093f9bcc2f15d2693a6c90e8fe38dabf2375e5f18e1c348d97c.js integrity="sha256-EVRhgSylsJP5vMLxXSaTpskOj+ONq/I3Xl8Y4cNI2Xw="></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.b3aab24bd69b746d28f433f4a82ecfa1556a75ba5ef9f4caa2bcc7ab8d327c14.js integrity="sha256-s6qyS9abdG0o9DP0qC7PoVVqdbpe+fTKorzHq40yfBQ="></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.fb649fcae62177dfe63e67081ddceb830b5ce1f05a4184e9bbb7d87ac4b8f4e5.js integrity="sha256-+2SfyuYhd9/mPmcIHdzrgwtc4fBaQYTpu7fYesS49OU="></script><script type=text/javascript src=/lib/clipboard/clipboard.min.8a7739925f4c03586479852df840b7061948832a7fda30c8c812d2ea4dd4c4f2.js integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI="></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:100},comment:{},search:{highlightTag:"em",lunrLanguageCode:"zh",lunrSegmentitURL:"/lib/lunr/lunr.segmentit.js",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50}}</script><script type=text/javascript src=/js/theme.min.f51938f3065a40ee841bcb558e4330e31fd26c0ea55343fff8770b88b0319a3c.js integrity="sha256-9Rk48wZaQO6EG8tVjkMw4x/SbA6lU0P/+HcLiLAxmjw="></script></body>
+</html>

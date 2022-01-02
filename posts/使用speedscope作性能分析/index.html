@@ -1,0 +1,226 @@
+<!doctype html><html lang=zh-cn>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>使用SpeedScope作性能分析 - sundy-li的博客</title><meta name=Description content="sundy-li写东西的地方"><meta property="og:title" content="使用SpeedScope作性能分析">
+<meta property="og:description" content>
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://example.org/posts/%E4%BD%BF%E7%94%A8speedscope%E4%BD%9C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/"><meta property="og:image" content="http://example.org/logo.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2020-09-11T19:07:13+08:00">
+<meta property="article:modified_time" content="2020-09-11T19:07:13+08:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="http://example.org/logo.png">
+<meta name=twitter:title content="使用SpeedScope作性能分析">
+<meta name=twitter:description content>
+<meta name=application-name content="sundy-li的博客">
+<meta name=apple-mobile-web-app-title content="sundy-li的博客"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=canonical href=http://example.org/posts/%E4%BD%BF%E7%94%A8speedscope%E4%BD%9C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/><link rel=next href=http://example.org/posts/c++%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF%E4%B9%8Bcrtp/><link rel=stylesheet href=/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH+KuXHiZWODptY5K8NF4="><link rel=stylesheet href=/css/style.min.1e2694bed152fa2922dbe909a441838ed693d88b1330f97485bfa8ed78da42df.css integrity="sha256-HiaUvtFS+iki2+kJpEGDjtaT2IsTMPl0hb+o7XjaQt8="><link rel=stylesheet href=/lib/fontawesome-free/all.min.876d023d9d10c97941b80c3b03e2a5b94631ff7a4af9cee5604a6a2d39718d84.css integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="><link rel=stylesheet href=/lib/animate/animate.min.3c770e90f98eb21b0c042fafb49755af93306fbaf42e449524f94fae9fc83295.css integrity="sha256-PHcOkPmOshsMBC+vtJdVr5Mwb7r0LkSVJPlPrp/IMpU="><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"使用SpeedScope作性能分析","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"http:\/\/example.org\/posts\/%E4%BD%BF%E7%94%A8speedscope%E4%BD%9C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90\/"},"genre":"posts","keywords":"profile, ClickHouse","wordcount":3363,"url":"http:\/\/example.org\/posts\/%E4%BD%BF%E7%94%A8speedscope%E4%BD%9C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90\/","datePublished":"2020-09-11T19:07:13+08:00","dateModified":"2020-09-11T19:07:13+08:00","publisher":{"@type":"Organization","name":"sundy-li"},"author":{"@type":"Person","name":"sundy-li"},"description":""}</script></head>
+<body header-desktop header-mobile><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':'auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark')&&document.body.setAttribute('theme','dark')</script>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title=sundy-li的博客>sundy-li的博客</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> 文章 </a><a class=menu-item href=/tags/> 标签 </a><a class=menu-item href=/categories/> 分类 </a><a class=menu-item href=/about/> 关于我 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title=sundy-li的博客>sundy-li的博客</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+取消
+</a>
+</div><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/about/ title>关于我</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>目录</h2>
+<div class=toc-content id=toc-content-auto></div>
+</div><article class="page single"><h1 class="single-title animated flipInX">使用SpeedScope作性能分析</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=http://github.com/sundy-li title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>sundy-li</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/clickhouse/><i class="far fa-folder fa-fw"></i>ClickHouse</a></span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-09-11>2020-09-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3363 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents></nav></div>
+</div><div class=content id=content><p><img class=lazyload src=/svg/loading.min.svg data-src=/images/cpu-bash-flamegraph.svg data-srcset="/images/cpu-bash-flamegraph.svg, /images/cpu-bash-flamegraph.svg 1.5x, /images/cpu-bash-flamegraph.svg 2x" data-sizes=auto alt=/images/cpu-bash-flamegraph.svg title=flamegraph></p>
+<h1 id=前言>前言</h1>
+<p>如果要按工具链友好度评选一门最佳语言，我会首选 Golang，因为它有一系列的<code>go tool</code>工具，面向开发者非常友好。</p>
+<p>其中<code>go tool pprof</code> 结合 <code>go-torch</code> ，能快速得出go程序的火焰图。在Linux系统中， <code>perf</code> 工具也十分强大，里面有各种子工具分析系统级进程的性能。<code>perf</code> 通常结合 <code>FlameGraph</code> 可以生成不错的火焰图。在一次偶然的机会中，笔者接触到了 <code>SpeedScope</code>，本文以调优 <code>ClickHouse</code> 为例子，介绍一下 <code>SpeedScope</code> 工具的使用。</p>
+<h1 id=speedscope-介绍>SpeedScope 介绍</h1>
+<p><a href=https://github.com/jlfwong/speedscope#usage target=_blank rel="noopener noreffer">SpeedScope</a> 是一款在线的 <code>flamegraph</code> 可视化工具。它可以和多个编程语言相结合，也可以将 <code>perf</code> report的结果拖拽到网站里面在线分析。</p>
+<h1 id=安装可选>安装(可选)</h1>
+<p><code>speedscope</code> 是 nodejs 编写的，安装这个工具是可选的，安装后可以基于本地生成可视化性能图。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>sudo npm install -g speedscope
+</code></pre></div><h1 id=使用>使用</h1>
+<blockquote>
+<p>我们在ClickHouse 里面执行一个”简单“且“复杂“的SQL的SQL，计算十亿个数的平均值。</p>
+</blockquote>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=k>select</span><span class=w> </span><span class=k>avg</span><span class=p>(</span><span class=nb>number</span><span class=p>)</span><span class=w> </span><span class=k>from</span><span class=w> </span><span class=n>numbers</span><span class=p>(</span><span class=mi>1000000000</span><span class=p>);</span><span class=w>
+</span></code></pre></div><p>使用 <code>perf</code> 工具"记录"程序性能, 记录10s</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>perf record -a -F <span class=m>999</span> -g -p <span class=m>17562</span>   sleep <span class=m>10</span>
+</code></pre></div><p>如果安装了 <code>speedscope</code> 工具， 我们可以直接在shell中调用</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>perf script -i perf.data <span class=p>|</span> speedscope -
+</code></pre></div><p>这个命令会生成一个静态html文件，本地的话可以直接打开进入可视化页面。但笔者并没有这样做，因为笔者在公司服务器作了perf记录，静态html其实是生成了一个到<code>npm modules</code>的跳转，无法拉到本地的浏览器打开。</p>
+<p>不过没事，我们可以将生成script拉到本地后,拖拽到 <code>https://www.speedscope.app/</code> 中打开。</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>perf script -i perf.data &gt; profile.linux-perf.txt
+</code></pre></div><p><img class=lazyload src=/svg/loading.min.svg data-src=/images/speedscope1.png data-srcset="/images/speedscope1.png, /images/speedscope1.png 1.5x, /images/speedscope1.png 2x" data-sizes=auto alt=/images/speedscope1.png title=speedscope截图></p>
+<p>进入页面后，我们可以非常直观地看到各个时间轴上的调用开销时间占用情况。上面截图中，可以反映出，10s内的采样中，有5.99s 耗在 <code>AggregateFunctionAvg</code> 函数中， 有 2.14s 耗在 <code>NumbersSource::generate</code> 生成中。</p>
+<p>使用 <code>Perf</code> 的方式，我们可以很直观得看到性能图，但我们并不能针对特定的SQL进行profile，下面介绍下 <code>clickhouse-speedscope</code> 如何针对特定SQL进行profile。</p>
+<h1 id=clickhouse-speedscope>clickhouse-speedscope</h1>
+<p>第一次接触到SpeedScope，是无意中看到了 <a href=https://github.com/laplab/clickhouse-speedscope target=_blank rel="noopener noreffer">clickhouse-speedscope</a> 项目。这个项目巧妙地利用了 clickhouse的系统表 <code>system.trace_log</code> 进行采样。</p>
+<blockquote>
+<p>注意：要使用<code>system.trace_log</code> ，必须安装好 <code>clickhouse-common-static-dbg</code> 库, 并且开启 <code>allow_introspection_functions</code>等参数，更多配置参数参考<a href=https://clickhouse.tech/docs/en/operations/system-tables/trace_log/ target=_blank rel="noopener noreffer">这里</a>.</p>
+</blockquote>
+<p>Clone <a href=https://github.com/laplab/clickhouse-speedscope target=_blank rel="noopener noreffer">clickhouse-speedscope</a> 后，发现代码非常简单，核心就一个python文件，监控了http端口进行处理请求的返回。</p>
+<ul>
+<li>pip安装好依赖库后，我们首先开启下端口监听 8089端口，同时会转发 query_id 查询 服务器域名为ck001 的clickhouse-server</li>
+</ul>
+<pre tabindex=0><code>python  main.py --ch-host ck001 --proxy-port 8089
+</code></pre><ul>
+<li>然后，我们在 clickhouse 层执行SQL，这里为了方便快速获取 query-id ，我们打开logs输出，以及打开函数抽样trace的开关</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=n>ubuntu</span><span class=w> </span><span class=p>:)</span><span class=w> </span><span class=k>set</span><span class=w> </span><span class=n>send_logs_level</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s1>&#39;trace&#39;</span><span class=p>;</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=k>SET</span><span class=w> </span><span class=n>send_logs_level</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s1>&#39;trace&#39;</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=n>Ok</span><span class=p>.</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=mi>0</span><span class=w> </span><span class=k>rows</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=k>set</span><span class=p>.</span><span class=w> </span><span class=n>Elapsed</span><span class=p>:</span><span class=w> </span><span class=mi>0</span><span class=p>.</span><span class=mi>021</span><span class=w> </span><span class=n>sec</span><span class=p>.</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=n>ubuntu</span><span class=w> </span><span class=p>:)</span><span class=w> </span><span class=k>set</span><span class=w> </span><span class=n>allow_introspection_functions</span><span class=w>  </span><span class=o>=</span><span class=w> </span><span class=mi>0</span><span class=p>;</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=k>SET</span><span class=w> </span><span class=n>allow_introspection_functions</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>0</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>02</span><span class=p>:</span><span class=mi>13</span><span class=p>.</span><span class=mi>061146</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>17134</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=n>d4a0c7af</span><span class=o>-</span><span class=n>c836</span><span class=o>-</span><span class=mi>4360</span><span class=o>-</span><span class=mi>8264</span><span class=o>-</span><span class=mi>926</span><span class=n>f634e1d94</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Debug</span><span class=o>&gt;</span><span class=w> </span><span class=n>executeQuery</span><span class=p>:</span><span class=w> </span><span class=p>(</span><span class=k>from</span><span class=w> </span><span class=mi>127</span><span class=p>.</span><span class=mi>0</span><span class=p>.</span><span class=mi>0</span><span class=p>.</span><span class=mi>1</span><span class=p>:</span><span class=mi>52012</span><span class=p>)</span><span class=w> </span><span class=k>SET</span><span class=w> </span><span class=n>allow_introspection_functions</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>0</span><span class=w>
+</span><span class=w></span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>02</span><span class=p>:</span><span class=mi>13</span><span class=p>.</span><span class=mi>061471</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>17134</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=n>d4a0c7af</span><span class=o>-</span><span class=n>c836</span><span class=o>-</span><span class=mi>4360</span><span class=o>-</span><span class=mi>8264</span><span class=o>-</span><span class=mi>926</span><span class=n>f634e1d94</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Debug</span><span class=o>&gt;</span><span class=w> </span><span class=n>MemoryTracker</span><span class=p>:</span><span class=w> </span><span class=n>Peak</span><span class=w> </span><span class=n>memory</span><span class=w> </span><span class=k>usage</span><span class=w> </span><span class=p>(</span><span class=k>for</span><span class=w> </span><span class=n>query</span><span class=p>):</span><span class=w> </span><span class=mi>0</span><span class=p>.</span><span class=mi>00</span><span class=w> </span><span class=n>B</span><span class=p>.</span><span class=w>
+</span><span class=w></span><span class=n>Ok</span><span class=p>.</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=mi>0</span><span class=w> </span><span class=k>rows</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=k>set</span><span class=p>.</span><span class=w> </span><span class=n>Elapsed</span><span class=p>:</span><span class=w> </span><span class=mi>0</span><span class=p>.</span><span class=mi>042</span><span class=w> </span><span class=n>sec</span><span class=p>.</span><span class=w>
+</span></code></pre></div><ul>
+<li>这里我们就可以看到具体日志了，然后我们继续执行那个”简单“且“复杂“的SQL （线上40core 128G服务器）</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=n>ubuntu</span><span class=w> </span><span class=p>:)</span><span class=w> </span><span class=k>select</span><span class=w> </span><span class=k>avg</span><span class=p>(</span><span class=nb>number</span><span class=p>)</span><span class=w> </span><span class=k>from</span><span class=w> </span><span class=n>numbers</span><span class=p>(</span><span class=mi>1000000000</span><span class=p>);</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=k>SELECT</span><span class=w> </span><span class=k>avg</span><span class=p>(</span><span class=nb>number</span><span class=p>)</span><span class=w>
+</span><span class=w></span><span class=k>FROM</span><span class=w> </span><span class=n>numbers</span><span class=p>(</span><span class=mi>1000000000</span><span class=p>)</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>03</span><span class=p>:</span><span class=mi>58</span><span class=p>.</span><span class=mi>739452</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>17134</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=mi>6</span><span class=n>e4b5384</span><span class=o>-</span><span class=mi>39</span><span class=n>c5</span><span class=o>-</span><span class=mi>4</span><span class=n>d02</span><span class=o>-</span><span class=mi>9383</span><span class=o>-</span><span class=n>e312e92f2681</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Debug</span><span class=o>&gt;</span><span class=w> </span><span class=n>executeQuery</span><span class=p>:</span><span class=w> </span><span class=p>(</span><span class=k>from</span><span class=w> </span><span class=mi>127</span><span class=p>.</span><span class=mi>0</span><span class=p>.</span><span class=mi>0</span><span class=p>.</span><span class=mi>1</span><span class=p>:</span><span class=mi>52012</span><span class=p>)</span><span class=w> </span><span class=k>SELECT</span><span class=w> </span><span class=k>avg</span><span class=p>(</span><span class=nb>number</span><span class=p>)</span><span class=w> </span><span class=k>FROM</span><span class=w> </span><span class=n>numbers</span><span class=p>(</span><span class=mi>1000000000</span><span class=p>)</span><span class=w>
+</span><span class=w></span><span class=err>→</span><span class=w> </span><span class=n>Progress</span><span class=p>:</span><span class=w> </span><span class=mi>0</span><span class=p>.</span><span class=mi>00</span><span class=w> </span><span class=k>rows</span><span class=p>,</span><span class=w> </span><span class=mi>0</span><span class=p>.</span><span class=mi>00</span><span class=w> </span><span class=n>B</span><span class=w> </span><span class=p>(</span><span class=mi>0</span><span class=p>.</span><span class=mi>00</span><span class=w> </span><span class=k>rows</span><span class=o>/</span><span class=n>s</span><span class=p>.,</span><span class=w> </span><span class=mi>0</span><span class=p>.</span><span class=mi>00</span><span class=w> </span><span class=n>B</span><span class=o>/</span><span class=n>s</span><span class=p>.)</span><span class=w> </span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>03</span><span class=p>:</span><span class=mi>58</span><span class=p>.</span><span class=mi>739624</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>17134</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=mi>6</span><span class=n>e4b5384</span><span class=o>-</span><span class=mi>39</span><span class=n>c5</span><span class=o>-</span><span class=mi>4</span><span class=n>d02</span><span class=o>-</span><span class=mi>9383</span><span class=o>-</span><span class=n>e312e92f2681</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Trace</span><span class=o>&gt;</span><span class=w> </span><span class=n>AccessRightsContext</span><span class=w> </span><span class=p>(</span><span class=k>default</span><span class=p>):</span><span class=w> </span><span class=k>Access</span><span class=w> </span><span class=k>granted</span><span class=p>:</span><span class=w> </span><span class=n>numbers</span><span class=p>()</span><span class=w> </span><span class=k>ON</span><span class=w> </span><span class=o>*</span><span class=p>.</span><span class=o>*</span><span class=w>
+</span><span class=w></span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>03</span><span class=p>:</span><span class=mi>58</span><span class=p>.</span><span class=mi>739649</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>17134</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=mi>6</span><span class=n>e4b5384</span><span class=o>-</span><span class=mi>39</span><span class=n>c5</span><span class=o>-</span><span class=mi>4</span><span class=n>d02</span><span class=o>-</span><span class=mi>9383</span><span class=o>-</span><span class=n>e312e92f2681</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Trace</span><span class=o>&gt;</span><span class=w> </span><span class=n>AccessRightsContext</span><span class=w> </span><span class=p>(</span><span class=k>default</span><span class=p>):</span><span class=w> </span><span class=k>Access</span><span class=w> </span><span class=k>granted</span><span class=p>:</span><span class=w> </span><span class=n>numbers</span><span class=p>()</span><span class=w> </span><span class=k>ON</span><span class=w> </span><span class=o>*</span><span class=p>.</span><span class=o>*</span><span class=w>
+</span><span class=w></span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>03</span><span class=p>:</span><span class=mi>58</span><span class=p>.</span><span class=mi>747053</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>17134</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=mi>6</span><span class=n>e4b5384</span><span class=o>-</span><span class=mi>39</span><span class=n>c5</span><span class=o>-</span><span class=mi>4</span><span class=n>d02</span><span class=o>-</span><span class=mi>9383</span><span class=o>-</span><span class=n>e312e92f2681</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Trace</span><span class=o>&gt;</span><span class=w> </span><span class=n>InterpreterSelectQuery</span><span class=p>:</span><span class=w> </span><span class=n>FetchColumns</span><span class=w> </span><span class=o>-&gt;</span><span class=w> </span><span class=n>Complete</span><span class=w>
+</span><span class=w></span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>03</span><span class=p>:</span><span class=mi>58</span><span class=p>.</span><span class=mi>747139</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>17134</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=mi>6</span><span class=n>e4b5384</span><span class=o>-</span><span class=mi>39</span><span class=n>c5</span><span class=o>-</span><span class=mi>4</span><span class=n>d02</span><span class=o>-</span><span class=mi>9383</span><span class=o>-</span><span class=n>e312e92f2681</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Debug</span><span class=o>&gt;</span><span class=w> </span><span class=n>executeQuery</span><span class=p>:</span><span class=w> </span><span class=n>Query</span><span class=w> </span><span class=n>pipeline</span><span class=p>:</span><span class=w>
+</span><span class=w></span><span class=n>Expression</span><span class=w>
+</span><span class=w> </span><span class=n>Expression</span><span class=w>
+</span><span class=w>  </span><span class=n>Aggregating</span><span class=w>
+</span><span class=w>   </span><span class=n>Concat</span><span class=w>
+</span><span class=w>    </span><span class=n>Expression</span><span class=w>
+</span><span class=w>     </span><span class=n>TreeExecutor</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=err>↘</span><span class=w> </span><span class=n>Progress</span><span class=p>:</span><span class=w> </span><span class=mi>75</span><span class=p>.</span><span class=mi>96</span><span class=w> </span><span class=n>million</span><span class=w> </span><span class=k>rows</span><span class=p>,</span><span class=w> </span><span class=mi>607</span><span class=p>.</span><span class=mi>65</span><span class=w> </span><span class=n>MB</span><span class=w> </span><span class=p>(</span><span class=mi>699</span><span class=p>.</span><span class=mi>98</span><span class=w> </span><span class=n>million</span><span class=w> </span><span class=k>rows</span><span class=o>/</span><span class=n>s</span><span class=p>.,</span><span class=w> </span><span class=mi>5</span><span class=p>.</span><span class=mi>60</span><span class=w> </span><span class=n>GB</span><span class=o>/</span><span class=n>s</span><span class=p>.)</span><span class=w>  </span><span class=mi>7</span><span class=o>%</span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>03</span><span class=p>:</span><span class=mi>58</span><span class=p>.</span><span class=mi>747262</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>28335</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=mi>6</span><span class=n>e4b5384</span><span class=o>-</span><span class=mi>39</span><span class=n>c5</span><span class=o>-</span><span class=mi>4</span><span class=n>d02</span><span class=o>-</span><span class=mi>9383</span><span class=o>-</span><span class=n>e312e92f2681</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Trace</span><span class=o>&gt;</span><span class=w> </span><span class=n>Aggregator</span><span class=p>:</span><span class=w> </span><span class=n>Aggregating</span><span class=w>
+</span><span class=w></span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>03</span><span class=p>:</span><span class=mi>58</span><span class=p>.</span><span class=mi>747377</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>28335</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=mi>6</span><span class=n>e4b5384</span><span class=o>-</span><span class=mi>39</span><span class=n>c5</span><span class=o>-</span><span class=mi>4</span><span class=n>d02</span><span class=o>-</span><span class=mi>9383</span><span class=o>-</span><span class=n>e312e92f2681</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Trace</span><span class=o>&gt;</span><span class=w> </span><span class=n>Aggregator</span><span class=p>:</span><span class=w> </span><span class=n>Aggregation</span><span class=w> </span><span class=k>method</span><span class=p>:</span><span class=w> </span><span class=n>without_key</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=err>┌─</span><span class=k>avg</span><span class=p>(</span><span class=nb>number</span><span class=p>)</span><span class=err>─┐</span><span class=w>
+</span><span class=w></span><span class=err>│</span><span class=w> </span><span class=mi>499999999</span><span class=p>.</span><span class=mi>5</span><span class=w> </span><span class=err>│</span><span class=w>
+</span><span class=w></span><span class=err>└─────────────┘</span><span class=w>
+</span><span class=w></span><span class=err>↖</span><span class=w> </span><span class=n>Progress</span><span class=p>:</span><span class=w> </span><span class=mi>951</span><span class=p>.</span><span class=mi>06</span><span class=w> </span><span class=n>million</span><span class=w> </span><span class=k>rows</span><span class=p>,</span><span class=w> </span><span class=mi>7</span><span class=p>.</span><span class=mi>61</span><span class=w> </span><span class=n>GB</span><span class=w> </span><span class=p>(</span><span class=mi>746</span><span class=p>.</span><span class=mi>09</span><span class=w> </span><span class=n>million</span><span class=w> </span><span class=k>rows</span><span class=o>/</span><span class=n>s</span><span class=p>.,</span><span class=w> </span><span class=mi>5</span><span class=p>.</span><span class=mi>97</span><span class=w> </span><span class=n>GB</span><span class=o>/</span><span class=n>s</span><span class=p>.)</span><span class=w> </span><span class=err>█████████████████████████████████████████████████████▎</span><span class=w>   </span><span class=mi>94</span><span class=o>%</span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>04</span><span class=p>:</span><span class=mi>00</span><span class=p>.</span><span class=mi>013119</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>28335</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=mi>6</span><span class=n>e4b5384</span><span class=o>-</span><span class=mi>39</span><span class=n>c5</span><span class=o>-</span><span class=mi>4</span><span class=n>d02</span><span class=o>-</span><span class=mi>9383</span><span class=o>-</span><span class=n>e312e92f2681</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Trace</span><span class=o>&gt;</span><span class=w> </span><span class=n>Aggregator</span><span class=p>:</span><span class=w> </span><span class=n>Aggregated</span><span class=p>.</span><span class=w> </span><span class=mi>1000000000</span><span class=w> </span><span class=k>to</span><span class=w> </span><span class=mi>1</span><span class=w> </span><span class=k>rows</span><span class=w> </span><span class=p>(</span><span class=k>from</span><span class=w> </span><span class=mi>7629</span><span class=p>.</span><span class=mi>395</span><span class=w> </span><span class=n>MiB</span><span class=p>)</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=mi>1</span><span class=p>.</span><span class=mi>266</span><span class=w> </span><span class=n>sec</span><span class=p>.</span><span class=w> </span><span class=p>(</span><span class=mi>790016853</span><span class=p>.</span><span class=mi>437</span><span class=w> </span><span class=k>rows</span><span class=o>/</span><span class=n>sec</span><span class=p>.,</span><span class=w> </span><span class=mi>6027</span><span class=p>.</span><span class=mi>350</span><span class=w> </span><span class=n>MiB</span><span class=o>/</span><span class=n>sec</span><span class=p>.)</span><span class=w>
+</span><span class=w></span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>04</span><span class=p>:</span><span class=mi>00</span><span class=p>.</span><span class=mi>013271</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>28335</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=mi>6</span><span class=n>e4b5384</span><span class=o>-</span><span class=mi>39</span><span class=n>c5</span><span class=o>-</span><span class=mi>4</span><span class=n>d02</span><span class=o>-</span><span class=mi>9383</span><span class=o>-</span><span class=n>e312e92f2681</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Trace</span><span class=o>&gt;</span><span class=w> </span><span class=n>Aggregator</span><span class=p>:</span><span class=w> </span><span class=n>Merging</span><span class=w> </span><span class=n>aggregated</span><span class=w> </span><span class=k>data</span><span class=w>
+</span><span class=w></span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>04</span><span class=p>:</span><span class=mi>00</span><span class=p>.</span><span class=mi>013537</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>17134</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=mi>6</span><span class=n>e4b5384</span><span class=o>-</span><span class=mi>39</span><span class=n>c5</span><span class=o>-</span><span class=mi>4</span><span class=n>d02</span><span class=o>-</span><span class=mi>9383</span><span class=o>-</span><span class=n>e312e92f2681</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Information</span><span class=o>&gt;</span><span class=w> </span><span class=n>executeQuery</span><span class=p>:</span><span class=w> </span><span class=k>Read</span><span class=w> </span><span class=mi>1000013824</span><span class=w> </span><span class=k>rows</span><span class=p>,</span><span class=w> </span><span class=mi>7</span><span class=p>.</span><span class=mi>45</span><span class=w> </span><span class=n>GiB</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=mi>1</span><span class=p>.</span><span class=mi>274</span><span class=w> </span><span class=n>sec</span><span class=p>.,</span><span class=w> </span><span class=mi>784921953</span><span class=w> </span><span class=k>rows</span><span class=o>/</span><span class=n>sec</span><span class=p>.,</span><span class=w> </span><span class=mi>5</span><span class=p>.</span><span class=mi>85</span><span class=w> </span><span class=n>GiB</span><span class=o>/</span><span class=n>sec</span><span class=p>.</span><span class=w>
+</span><span class=w></span><span class=p>[</span><span class=n>ubuntu</span><span class=p>]</span><span class=w> </span><span class=mi>2020</span><span class=p>.</span><span class=mi>09</span><span class=p>.</span><span class=mi>11</span><span class=w> </span><span class=mi>23</span><span class=p>:</span><span class=mi>04</span><span class=p>:</span><span class=mi>00</span><span class=p>.</span><span class=mi>013576</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=mi>17134</span><span class=w> </span><span class=p>]</span><span class=w> </span><span class=err>{</span><span class=mi>6</span><span class=n>e4b5384</span><span class=o>-</span><span class=mi>39</span><span class=n>c5</span><span class=o>-</span><span class=mi>4</span><span class=n>d02</span><span class=o>-</span><span class=mi>9383</span><span class=o>-</span><span class=n>e312e92f2681</span><span class=err>}</span><span class=w> </span><span class=o>&lt;</span><span class=n>Debug</span><span class=o>&gt;</span><span class=w> </span><span class=n>MemoryTracker</span><span class=p>:</span><span class=w> </span><span class=n>Peak</span><span class=w> </span><span class=n>memory</span><span class=w> </span><span class=k>usage</span><span class=w> </span><span class=p>(</span><span class=k>for</span><span class=w> </span><span class=n>query</span><span class=p>):</span><span class=w> </span><span class=mi>137</span><span class=p>.</span><span class=mi>09</span><span class=w> </span><span class=n>KiB</span><span class=p>.</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=mi>1</span><span class=w> </span><span class=k>rows</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=k>set</span><span class=p>.</span><span class=w> </span><span class=n>Elapsed</span><span class=p>:</span><span class=w> </span><span class=mi>1</span><span class=p>.</span><span class=mi>275</span><span class=w> </span><span class=n>sec</span><span class=p>.</span><span class=w> </span><span class=n>Processed</span><span class=w> </span><span class=mi>1</span><span class=p>.</span><span class=mi>00</span><span class=w> </span><span class=n>billion</span><span class=w> </span><span class=k>rows</span><span class=p>,</span><span class=w> </span><span class=mi>8</span><span class=p>.</span><span class=mi>00</span><span class=w> </span><span class=n>GB</span><span class=w> </span><span class=p>(</span><span class=mi>784</span><span class=p>.</span><span class=mi>34</span><span class=w> </span><span class=n>million</span><span class=w> </span><span class=k>rows</span><span class=o>/</span><span class=n>s</span><span class=p>.,</span><span class=w> </span><span class=mi>6</span><span class=p>.</span><span class=mi>27</span><span class=w> </span><span class=n>GB</span><span class=o>/</span><span class=n>s</span><span class=p>.)</span><span class=w>
+</span></code></pre></div><ul>
+<li>拿到了query-id，之后，我们通过 curl 可以直接获取到traceing的结果。</li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash>curl <span class=s1>&#39;http://localhost:8089/query?query_id=fe9078cd-9570-4895-b328-4728a097306a&#39;</span> <span class=p>|</span> speedscope -
+</code></pre></div><ul>
+<li>如果没有装 <code>speedscope</code>， 也可以重定向到一个文件中，然后拖拽到 <code>https://www.speedscope.app/</code> 中。</li>
+</ul>
+<h1 id=总结>总结</h1>
+<p>使用 <code>speedscope</code>， 我们在本地就可以很方便地对 <code>ClickHouse</code> 进行远程 <code>profile</code>，去试试吧！</p></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>更新于 2020-09-11</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/profile/>profile</a>,&nbsp;<a href=/tags/clickhouse/>ClickHouse</a></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span>
+</section>
+</div>
+<div class=post-nav>
+<a href=/posts/c++%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF%E4%B9%8Bcrtp/ class=next rel=next title=C++代码模板之CRTP>C++代码模板之CRTP<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=http://github.com/sundy-li target=_blank>sundy-li</a></span></div>
+</div>
+</footer></div>
+<div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部>
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论>
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.bcff85fb5e00d68802850b393ac7792c997f722f536f38e26638c46dca8e5eb6.js integrity="sha256-vP+F+14A1ogChQs5Osd5LJl/ci9TbzjiZjjEbcqOXrY="></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.615590a2ca2b667afa7c02ef396f5500b62e22795ddbb46448f90494605d09a5.js integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU="></script><script type=text/javascript src=/lib/lunr/lunr.min.df84a2d58ea594c04a3371b48d020b55ea10284c2ec636e4e331965d7313e29b.js integrity="sha256-34Si1Y6llMBKM3G0jQILVeoQKEwuxjbk4zGWXXMT4ps="></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.115461812ca5b093f9bcc2f15d2693a6c90e8fe38dabf2375e5f18e1c348d97c.js integrity="sha256-EVRhgSylsJP5vMLxXSaTpskOj+ONq/I3Xl8Y4cNI2Xw="></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.b3aab24bd69b746d28f433f4a82ecfa1556a75ba5ef9f4caa2bcc7ab8d327c14.js integrity="sha256-s6qyS9abdG0o9DP0qC7PoVVqdbpe+fTKorzHq40yfBQ="></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.fb649fcae62177dfe63e67081ddceb830b5ce1f05a4184e9bbb7d87ac4b8f4e5.js integrity="sha256-+2SfyuYhd9/mPmcIHdzrgwtc4fBaQYTpu7fYesS49OU="></script><script type=text/javascript src=/lib/clipboard/clipboard.min.8a7739925f4c03586479852df840b7061948832a7fda30c8c812d2ea4dd4c4f2.js integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI="></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:100},comment:{},search:{highlightTag:"em",lunrLanguageCode:"zh",lunrSegmentitURL:"/lib/lunr/lunr.segmentit.js",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50}}</script><script type=text/javascript src=/js/theme.min.f51938f3065a40ee841bcb558e4330e31fd26c0ea55343fff8770b88b0319a3c.js integrity="sha256-9Rk48wZaQO6EG8tVjkMw4x/SbA6lU0P/+HcLiLAxmjw="></script></body>
+</html>
