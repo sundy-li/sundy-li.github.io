@@ -98,7 +98,7 @@ theme = "LoveIt"
      [params.page.comment.gitalk]
        enable = true
        owner = "sundy-li"
-       repo = "https://github.com/sundy-li/sundy-li.github.io"
+       repo = "sundy-li.github.io"
 
        # not safe, todo
        clientId = "ec65a8719513fe7b4d9a"
@@ -153,3 +153,6 @@ theme = "LoveIt"
   name = "sundy-li"
   email = ""
   link = "http://github.com/sundy-li"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
