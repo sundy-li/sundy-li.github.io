@@ -7,11 +7,11 @@
 <title>使用SpeedScope作性能分析 - sundy-li的博客</title><meta name=Description content="sundy-li写东西的地方"><meta property="og:title" content="使用SpeedScope作性能分析">
 <meta property="og:description" content>
 <meta property="og:type" content="article">
-<meta property="og:url" content="http://example.org/posts/%E4%BD%BF%E7%94%A8speedscope%E4%BD%9C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/"><meta property="og:image" content="http://example.org/logo.png"><meta property="article:section" content="posts">
+<meta property="og:url" content="http://example.org/posts/%E4%BD%BF%E7%94%A8speedscope%E4%BD%9C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/"><meta property="og:image" content="http://example.org/logs/logo.png"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2020-09-11T19:07:13+08:00">
 <meta property="article:modified_time" content="2020-09-11T19:07:13+08:00">
 <meta name=twitter:card content="summary_large_image">
-<meta name=twitter:image content="http://example.org/logo.png">
+<meta name=twitter:image content="http://example.org/logs/logo.png">
 <meta name=twitter:title content="使用SpeedScope作性能分析">
 <meta name=twitter:description content>
 <meta name=application-name content="sundy-li的博客">
@@ -92,17 +92,26 @@
 <span>目录</span>
 <span><i class="details-icon fas fa-angle-right"></i></span>
 </div>
-<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents></nav></div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#前言>前言</a></li>
+<li><a href=#speedscope-介绍>SpeedScope 介绍</a></li>
+<li><a href=#安装可选>安装(可选)</a></li>
+<li><a href=#使用>使用</a></li>
+<li><a href=#clickhouse-speedscope>clickhouse-speedscope</a></li>
+<li><a href=#总结>总结</a></li>
+</ul>
+</nav></div>
 </div><div class=content id=content><p><img class=lazyload src=/svg/loading.min.svg data-src=/images/cpu-bash-flamegraph.svg data-srcset="/images/cpu-bash-flamegraph.svg, /images/cpu-bash-flamegraph.svg 1.5x, /images/cpu-bash-flamegraph.svg 2x" data-sizes=auto alt=/images/cpu-bash-flamegraph.svg title=flamegraph></p>
-<h1 id=前言>前言</h1>
+<h2 id=前言>前言</h2>
 <p>如果要按工具链友好度评选一门最佳语言，我会首选 Golang，因为它有一系列的<code>go tool</code>工具，面向开发者非常友好。</p>
 <p>其中<code>go tool pprof</code> 结合 <code>go-torch</code> ，能快速得出go程序的火焰图。在Linux系统中， <code>perf</code> 工具也十分强大，里面有各种子工具分析系统级进程的性能。<code>perf</code> 通常结合 <code>FlameGraph</code> 可以生成不错的火焰图。在一次偶然的机会中，笔者接触到了 <code>SpeedScope</code>，本文以调优 <code>ClickHouse</code> 为例子，介绍一下 <code>SpeedScope</code> 工具的使用。</p>
-<h1 id=speedscope-介绍>SpeedScope 介绍</h1>
+<h2 id=speedscope-介绍>SpeedScope 介绍</h2>
 <p><a href=https://github.com/jlfwong/speedscope#usage target=_blank rel="noopener noreffer">SpeedScope</a> 是一款在线的 <code>flamegraph</code> 可视化工具。它可以和多个编程语言相结合，也可以将 <code>perf</code> report的结果拖拽到网站里面在线分析。</p>
-<h1 id=安装可选>安装(可选)</h1>
+<h2 id=安装可选>安装(可选)</h2>
 <p><code>speedscope</code> 是 nodejs 编写的，安装这个工具是可选的，安装后可以基于本地生成可视化性能图。</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh>sudo npm install -g speedscope
-</code></pre></div><h1 id=使用>使用</h1>
+</code></pre></div><h2 id=使用>使用</h2>
 <blockquote>
 <p>我们在ClickHouse 里面执行一个”简单“且“复杂“的SQL的SQL，计算十亿个数的平均值。</p>
 </blockquote>
@@ -117,7 +126,7 @@
 </code></pre></div><p><img class=lazyload src=/svg/loading.min.svg data-src=/images/speedscope1.png data-srcset="/images/speedscope1.png, /images/speedscope1.png 1.5x, /images/speedscope1.png 2x" data-sizes=auto alt=/images/speedscope1.png title=speedscope截图></p>
 <p>进入页面后，我们可以非常直观地看到各个时间轴上的调用开销时间占用情况。上面截图中，可以反映出，10s内的采样中，有5.99s 耗在 <code>AggregateFunctionAvg</code> 函数中， 有 2.14s 耗在 <code>NumbersSource::generate</code> 生成中。</p>
 <p>使用 <code>Perf</code> 的方式，我们可以很直观得看到性能图，但我们并不能针对特定的SQL进行profile，下面介绍下 <code>clickhouse-speedscope</code> 如何针对特定SQL进行profile。</p>
-<h1 id=clickhouse-speedscope>clickhouse-speedscope</h1>
+<h2 id=clickhouse-speedscope>clickhouse-speedscope</h2>
 <p>第一次接触到SpeedScope，是无意中看到了 <a href=https://github.com/laplab/clickhouse-speedscope target=_blank rel="noopener noreffer">clickhouse-speedscope</a> 项目。这个项目巧妙地利用了 clickhouse的系统表 <code>system.trace_log</code> 进行采样。</p>
 <blockquote>
 <p>注意：要使用<code>system.trace_log</code> ，必须安装好 <code>clickhouse-common-static-dbg</code> 库, 并且开启 <code>allow_introspection_functions</code>等参数，更多配置参数参考<a href=https://clickhouse.tech/docs/en/operations/system-tables/trace_log/ target=_blank rel="noopener noreffer">这里</a>.</p>
@@ -186,7 +195,7 @@
 </code></pre></div><ul>
 <li>如果没有装 <code>speedscope</code>， 也可以重定向到一个文件中，然后拖拽到 <code>https://www.speedscope.app/</code> 中。</li>
 </ul>
-<h1 id=总结>总结</h1>
+<h2 id=总结>总结</h2>
 <p>使用 <code>speedscope</code>， 我们在本地就可以很方便地对 <code>ClickHouse</code> 进行远程 <code>profile</code>，去试试吧！</p></div><div class=post-footer id=post-footer>
 <div class=post-info>
 <div class=post-info-line>
@@ -211,7 +220,9 @@
 <div class=post-nav>
 <a href=/posts/c++%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF%E4%B9%8Bcrtp/ class=next rel=next title=C++代码模板之CRTP>C++代码模板之CRTP<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
-</article></div>
+<div id=comments><div id=gitalk class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk></a>Gitalk</a>.
+</noscript></div></article></div>
 </main><footer class=footer>
 <div class=footer-container><div class=footer-line>
 </div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=http://github.com/sundy-li target=_blank>sundy-li</a></span></div>
@@ -222,5 +233,5 @@
 </a><a href=# id=view-comments class=fixed-button title=查看评论>
 <i class="fas fa-comment fa-fw"></i>
 </a>
-</div><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.bcff85fb5e00d68802850b393ac7792c997f722f536f38e26638c46dca8e5eb6.js integrity="sha256-vP+F+14A1ogChQs5Osd5LJl/ci9TbzjiZjjEbcqOXrY="></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.615590a2ca2b667afa7c02ef396f5500b62e22795ddbb46448f90494605d09a5.js integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU="></script><script type=text/javascript src=/lib/lunr/lunr.min.df84a2d58ea594c04a3371b48d020b55ea10284c2ec636e4e331965d7313e29b.js integrity="sha256-34Si1Y6llMBKM3G0jQILVeoQKEwuxjbk4zGWXXMT4ps="></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.115461812ca5b093f9bcc2f15d2693a6c90e8fe38dabf2375e5f18e1c348d97c.js integrity="sha256-EVRhgSylsJP5vMLxXSaTpskOj+ONq/I3Xl8Y4cNI2Xw="></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.b3aab24bd69b746d28f433f4a82ecfa1556a75ba5ef9f4caa2bcc7ab8d327c14.js integrity="sha256-s6qyS9abdG0o9DP0qC7PoVVqdbpe+fTKorzHq40yfBQ="></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.fb649fcae62177dfe63e67081ddceb830b5ce1f05a4184e9bbb7d87ac4b8f4e5.js integrity="sha256-+2SfyuYhd9/mPmcIHdzrgwtc4fBaQYTpu7fYesS49OU="></script><script type=text/javascript src=/lib/clipboard/clipboard.min.8a7739925f4c03586479852df840b7061948832a7fda30c8c812d2ea4dd4c4f2.js integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI="></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:100},comment:{},search:{highlightTag:"em",lunrLanguageCode:"zh",lunrSegmentitURL:"/lib/lunr/lunr.segmentit.js",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50}}</script><script type=text/javascript src=/js/theme.min.f51938f3065a40ee841bcb558e4330e31fd26c0ea55343fff8770b88b0319a3c.js integrity="sha256-9Rk48wZaQO6EG8tVjkMw4x/SbA6lU0P/+HcLiLAxmjw="></script></body>
+</div><link rel=stylesheet href=/lib/gitalk/gitalk.min.b48eb74ff23abaf4929f45ca4576c78a4d09241537d6b4974507aa5359cd0735.css integrity="sha256-tI63T/I6uvSSn0XKRXbHik0JJBU31rSXRQeqU1nNBzU="><script type=text/javascript src=/lib/gitalk/gitalk.min.0a873c7ad4c8e3eaf8357ef0c7f0fdc821654e86e646b54999a55810dd6657a0.js integrity="sha256-Coc8etTI4+r4NX7wx/D9yCFlTobmRrVJmaVYEN1mV6A="></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.bcff85fb5e00d68802850b393ac7792c997f722f536f38e26638c46dca8e5eb6.js integrity="sha256-vP+F+14A1ogChQs5Osd5LJl/ci9TbzjiZjjEbcqOXrY="></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.615590a2ca2b667afa7c02ef396f5500b62e22795ddbb46448f90494605d09a5.js integrity="sha256-YVWQosorZnr6fALvOW9VALYuInld27RkSPkElGBdCaU="></script><script type=text/javascript src=/lib/lunr/lunr.min.df84a2d58ea594c04a3371b48d020b55ea10284c2ec636e4e331965d7313e29b.js integrity="sha256-34Si1Y6llMBKM3G0jQILVeoQKEwuxjbk4zGWXXMT4ps="></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.115461812ca5b093f9bcc2f15d2693a6c90e8fe38dabf2375e5f18e1c348d97c.js integrity="sha256-EVRhgSylsJP5vMLxXSaTpskOj+ONq/I3Xl8Y4cNI2Xw="></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.b3aab24bd69b746d28f433f4a82ecfa1556a75ba5ef9f4caa2bcc7ab8d327c14.js integrity="sha256-s6qyS9abdG0o9DP0qC7PoVVqdbpe+fTKorzHq40yfBQ="></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.fb649fcae62177dfe63e67081ddceb830b5ce1f05a4184e9bbb7d87ac4b8f4e5.js integrity="sha256-+2SfyuYhd9/mPmcIHdzrgwtc4fBaQYTpu7fYesS49OU="></script><script type=text/javascript src=/lib/clipboard/clipboard.min.8a7739925f4c03586479852df840b7061948832a7fda30c8c812d2ea4dd4c4f2.js integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI="></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:100},comment:{gitalk:{admin:["sundy-li"],clientID:"ec65a8719513fe7b4d9a",clientSecret:"5b43d6e7f7b971b4ee51e9417332acf93c4165ec",id:"2020-09-11T19:07:13+08:00",owner:"sundy-li",repo:"https://github.com/sundy-li/sundy-li.github.io",title:"使用SpeedScope作性能分析"}},search:{highlightTag:"em",lunrLanguageCode:"zh",lunrSegmentitURL:"/lib/lunr/lunr.segmentit.js",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50}}</script><script type=text/javascript src=/js/theme.min.f51938f3065a40ee841bcb558e4330e31fd26c0ea55343fff8770b88b0319a3c.js integrity="sha256-9Rk48wZaQO6EG8tVjkMw4x/SbA6lU0P/+HcLiLAxmjw="></script></body>
 </html>
