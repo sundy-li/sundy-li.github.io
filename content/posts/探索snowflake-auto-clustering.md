@@ -6,8 +6,7 @@ tags: ["Snowflake", "database", "Cloud-native"]
 categories: ["database"]
 ---
 
-
-## TLDR
+## Context
 
 `Snowflake` IPO 大火之后，大家都开始慢慢了解到这个完全基于云计算设计的新式数据仓库。 `Snowflake` 的核心在于基于云端近似无限的计算存储资源，提供了极致弹性且高效的计算引擎 并且搭配 低成本且同样弹性伸缩的存储，大大减少了用户的心智负担和数据的计算存储成本，让用户更加专注于发挥数据对业务的价值。对于传统的数据仓库来说，`Snowflake` 就像一块降维打击的 二向箔。
 
@@ -19,7 +18,7 @@ categories: ["database"]
 
 > 注意: 这里的 Clustering 是指分组、聚类 的意思，注意不要理解为分布式、集群等概念。
 
-Snowflake 的 Clustering 功能 和传统数据的 Partition 分区功能类似。但在传统的数据库系统中，大多依赖一些静态的分区规则来实现数据的物理隔离，比如按时间，按用户特征hash等等。在hive等数据仓库中，最常见到的还是按照时间分区，比如按月、按天分区。 当一个带有分区字段相关的查询过来的时候，分区的裁剪可以直接忽略掉不匹配的数据，这样就可以大大减少了数据的读取和计算量，从而提高查询性能。
+Snowflake 的 Clustering 功能 和传统数据的 Partition 分区功能类似。但在传统的数据库系统中，大多依赖一些静态的分区规则来实现数据的物理隔离，如按时间，按用户特征hash等等，在hive等数据仓库中，最常见到的还是按照时间分区。当一个带有分区字段相关的查询过来的时候，分区的裁剪可以直接忽略掉不匹配的数据，这样就可以大大减少了数据的读取和计算量，从而提高查询性能。
 
 静态分区用法非常简单，比如在Hive中：
 ```sql
@@ -82,12 +81,12 @@ Snowflake 在设计中 完全抛弃了 传统的静态`Partition` 的概念，�
 
 Snowflake 引入了几个主要的指标来衡量表的 `Well-Clustered` 程度：
 
-- width: 在一个Range范围内，有多少个 `Micro-Partitions` 有重叠
-- depth: 在一个数据点中，有多少个 `Micro-Partitions` 有重叠
+- Overlaps: 在一个Range范围内，有多少个 `Micro-Partitions` 有重叠
+- Depth: 在一个数据点中，有多少个 `Micro-Partitions` 有重叠
 
 ![measuring-clustering](/images/measuring-clustering.png)
 
-上面的图从上到下展示了四种 表 Cluster 的状态， 第一种情况是4个 微分区 完全重叠，这种情况是最糟糕的，因为它没有任何区分度，命中了A-Z这个Range的查询会不可避免地扫描四个分区。 随着Depth指标的下降，表中微分区变得逐渐离散， `Overlap` 的 `Width` 指标也在下降，表也逐渐变得更加 `Well-Clustered`。
+上面的图从上到下展示了四种 表 Cluster 的状态， 第一种情况是4个 微分区 完全重叠，这种情况是最糟糕的，因为它没有任何区分度，命中了A-Z这个Range的查询会不可避免地扫描四个分区。 随着Depth指标的下降，表中微分区变得逐渐离散， `Overlaps` 指标也在下降，表也逐渐变得更加 `Well-Clustered`。
 
 当然，在实际的表分布中，微分区的分布要达到最下面那样规整（全局有序）是不现实的，因为所需要的开销太大了。
 
@@ -96,7 +95,7 @@ Snowflake 引入了几个主要的指标来衡量表的 `Well-Clustered` 程度�
 ![cluster-level1](/images/cluster-level1.png)
 
 
-为了减少写放大，微分区的合并策略和  `LSM-tree` 类似，微分区在后台不断地合并后形成新的微分区，每次合并完成后，微分区的 `Level` 值就会自增（clickhouse也有类似的 Part 合并逻辑），所以 `Level` 表示的就是微分区经历过的合并次数（用来衡量经历过的合并成本）。新数据流入的微分区 `Level` 默认是0，`Level` 越低的微分区中，`width` 和 `depth` 指标相对来说会越高，在不断合并的过程中，微分区变得越来越离散，表也变得更加 `Well-Clustered`。
+为了减少写放大，微分区的合并策略和  `LSM-tree` 类似，微分区在后台不断地合并后形成新的微分区，每次合并完成后，微分区的 `Level` 值就会自增（clickhouse也有类似的 Part 合并逻辑），所以 `Level` 表示的就是微分区经历过的合并次数（用来衡量经历过的合并成本）。新数据流入的微分区 `Level` 默认是0，`Level` 越低的微分区中，`Overlaps` 和 `Depth` 指标相对来说会越高，在不断合并的过程中，微分区变得越来越离散，表也变得更加 `Well-Clustered`。
 
 ![cluster-level2](/images/cluster-level2.png)
 
@@ -114,7 +113,7 @@ Snowflake 引入了几个主要的指标来衡量表的 `Well-Clustered` 程度�
 
 ### Part-Selection 任务
 
-Selection 任务会从某个 `Level` 中选择出微分区列表集合，选择的策略是启发式的：哪个Range中覆盖的微分区合并后，表的`Cluster` 状态会更好 来作为选择的目的。
+Selection 任务会从某个 `Level` 中选择出微分区列表集合，选择的策略是启发式的。
 
 上面提到的2个指标可以构建一个启发式的算法：
 
@@ -122,6 +121,22 @@ Selection 任务会从某个 `Level` 中选择出微分区列表集合，选择�
 
 2. Depth 高的微分区被选择的优先级高。
 
+因此Selection的目标就是降低 `Level` 中微分区的平均深度，`AvgDepth`。
+
+这里引入一个`AvgDepth`的计算逻辑：
+
+下面四个微分区的情况下：
+![Avg-Depth1](/images/avg-depth1.png)
+
+我们对每个端点进行分析，如果没有overlap，depth忽略，因为depth的目的就是衡量overflap的程度，引入depth = 0会导致数据有偏差，此时depth表示一个端点覆盖了几个分区。
+![Avg-Depth2](/images/avg-depth2.png)
+
+最终的计算方式是：
+```
+AvgDepth = Sum(DepthOfOverflapPoint) / OverflapPointsCnt
+```
+
+Snowflake 没有公开具体的Selection算法，不过大概是 Level + AvgDepth 结合的一个公式进行排序，我们假设它是以 每个Level的AvgDepth排序选择某个Level，然后去顺序遍历此Level下的所有端点，超过了AvgDepth的连续端点会被选择作为Range。
 
 
 ![part-selection](/images/part-selection.png)
@@ -129,18 +144,16 @@ Selection 任务会从某个 `Level` 中选择出微分区列表集合，选择�
 
 - 上面的曲线是如何构建的 ？
 
-横轴对应的就是Key的Range， 纵轴表示 Depth，计算方式大概是：遍历所有的微分区，将微分区的 Range 的 Depth 进行求和，得出对应端点的 Y 值 （这里应该可以用差分数组的数据结构进行优化）
+横轴对应的就是Key的Range， 纵轴表示 Depth，计算方式大概是：遍历所有的微分区，将微分区的 Range 的 Depth 进行求和 （即上面的 `DepthOfOverflapPoint` )，得出对应端点的 Y 值 （这里应该可以用差分数组的数据结构进行优化）
 
 - 选择的策略是什么 ？
 
-上图是选择了两个微分区列表的集合示例，被X轴[x1, x2] 范围有交集的微分区都将被选择 进行合并。
-
-[X1, X2] 的范围是根据 [x1, x2] 内的平均 Depth 最大决定的，所以 [x1, x2] 比较靠近曲线的波峰。
+上图是选择了两个微分区列表的集合示例，选择的方式是顺序遍历所有的端点，如果端点的Depth超过了AvgDepth，就会被选择，连续选择的端点构成一个Range。
 
 
-- 为什么不选最高的Depth ？
+- 为什么不直接选最高的Depth ？
 
-可以发现最高点 Depth 虽然最高，但 覆盖的Range 变窄，这样导致选择的微分区数量太小，效率不高，猜测它应该维护了一个最小的Width 阈值 和 最小的Depth 阈值 来决定选择的区间。
+可以发现最高点 Depth 虽然最高，但 覆盖的Range 变窄，这样导致选择的微分区数量太小，对降低AvgDepth的影响较少。
 
 - 选择的结果是什么 ？
 
@@ -160,7 +173,11 @@ ClickHouse 中也有类似的[选择策略算法](https://github.com/ClickHouse/
 1. Snowflake 和 ClickHouse不一样， 它不再维护微分区内部的稀疏索引， 稀疏索引的最小粒度就是微分区。
 2. 在云端对象存储中，读取整个微分区 比 在微分区内部进行部分Range 虽然IO开销稍大，但差异不会太大， 而且对象存储一般都有对象级别的Cache，所以Snowflake的元数据只存储了微分区粒度的索引。
 
-## 其他优化
+## 其他
+
+- 系统函数：
+	- [`system$clustering_depth`](https://docs.snowflake.com/en/sql-reference/functions/system_clustering_depth.html): 返回表平均的ClusteringDepth，可以指定 `columns` 参数
+	- [`system$clustering_information`](https://docs.snowflake.com/en/sql-reference/functions/system_clustering_information.html): 返回表相关clustering 信息，包含 `average_overlaps`, `average_depth`, `partition_depth_histogram` 等
 
 - 锁优化
 
@@ -170,6 +187,9 @@ Selection 和 Merge 进行不会对原始数据持有锁，也就是说在这两
 
 就是上面讲的 Selection 和 Merge 做成两个独立的服务异步运行。 Snowflake 旧版本提供了 手动 Cluster，后面废弃了，我猜测更多是让用户使用便捷，不用去Care Clustering这层操作，因为这些事情后台会自动做了，不当地频繁clustering反而增加了不必要的开销。
 
+- 收费
+
+虽然clustering没有用客户的计算资源，但收费还是要算在用户头上的，在 `Billing & Usage` 页面可以看到对应的计费情况。
 
 
 相关配图，参考文章来源：
@@ -177,6 +197,7 @@ Selection 和 Merge 进行不会对原始数据持有锁，也就是说在这两
 - [tables-clustering-micropartitions](https://docs.snowflake.com/en/user-guide/tables-clustering-micropartitions.html)
 - [Automatic Clustering at Snowflake](https://medium.com/snowflake/automatic-clustering-at-snowflake-317e0bb45541)
 - [How does automatic clustering work in Snowflake](https://www.linkedin.com/pulse/how-does-automatic-clustering-work-snowflake-minzhen-yang/)
+- [zero-to-snowflake-automated-clustering-in-snowflake](https://interworks.com/blog/2020/05/28/zero-to-snowflake-automated-clustering-in-snowflake/)
 
 
 
