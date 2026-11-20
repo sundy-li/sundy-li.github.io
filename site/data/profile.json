@@ -1,0 +1,31 @@
+{
+  "name": "Sundy Li",
+  "handle": "sundy-li",
+  "location": {
+    "zh-CN": "深圳",
+    "en": "Shenzhen"
+  },
+  "university": {
+    "zh-CN": "中山大学",
+    "en": "Sun Yat-sen University"
+  },
+  "focus_areas": {
+    "zh-CN": ["数据库内核", "大数据计算引擎", "Data Infra", "AI Agent"],
+    "en": ["database internals", "big data processing engines", "data infrastructure", "AI agents"]
+  },
+  "tech_stack": ["Go", "Rust"],
+  "organization": "Datafuse Labs",
+  "organization_url": "https://github.com/datafuselabs",
+  "current_project": "Databend",
+  "project_url": "https://github.com/databendlabs/databend",
+  "project_summary": {
+    "zh-CN": "一个用 Rust 构建的开源云原生数仓",
+    "en": "an open-source cloud data warehouse built in Rust"
+  },
+  "early_project": "ClickHouse",
+  "early_project_url": "https://github.com/ClickHouse/ClickHouse",
+  "github": "https://github.com/sundy-li",
+  "telegram": "https://t.me/sundyli",
+  "x": "https://x.com/sundyli1",
+  "site_source": "https://github.com/sundy-li/sundy-li.github.io"
+}

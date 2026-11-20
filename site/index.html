@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- profile:description --><meta name="description" content="Sundy Li（sundy-li）的个人主页。常驻深圳，专注于数据库内核、大数据计算引擎、Data Infra 和 AI Agent。"><!-- /profile:description -->
+  <meta name="theme-color" content="#101210">
+  <!-- profile:title --><title>关于我 · Sundy Li</title><!-- /profile:title -->
+  <link rel="canonical" href="https://sundy-li.github.io/">
+  <link rel="alternate" hreflang="zh-CN" href="https://sundy-li.github.io/">
+  <link rel="alternate" hreflang="en" href="https://sundy-li.github.io/en/">
+  <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="stylesheet" href="/assets/playground.css">
+  <script type="module" src="/assets/playground.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">跳到正文</a>
+  <header class="site-header shell">
+    <span class="brand"><img src="/assets/mark.svg" width="26" height="26" alt=""> <!-- profile:handle -->sundy-li<!-- /profile:handle --></span>
+    <nav aria-label="主菜单">
+      <ul class="nav-list">
+        <li><a href="/" aria-current="page">关于我</a></li>
+        <li class="language"><a href="/en/" lang="en" hreflang="en">English</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="shell" id="content" tabindex="-1">
+    <section class="hero profile-hero">
+      <div class="hero-heading">
+        <p class="eyebrow"><span class="marker" aria-hidden="true"></span> 个人主页</p>
+        <h1 class="hero-title" lang="en"><!-- profile:name -->Sundy Li<!-- /profile:name --></h1>
+      </div>
+      <div class="hero-copy">
+        <p class="lede"><!-- profile:intro -->我常驻深圳，毕业于中山大学，专注于数据库内核、大数据计算引擎、<span lang="en">Data Infra</span> 和 <span lang="en">AI Agent</span>。熟悉 Go 和 Rust。<!-- /profile:intro --></p>
+        <ul class="link-list" role="list">
+          <li><!-- profile:github --><a href="https://github.com/sundy-li">GitHub <span class="arrow" aria-hidden="true">↗</span></a><!-- /profile:github --></li>
+          <li><!-- profile:telegram --><a href="https://t.me/sundyli">Telegram <span class="arrow" aria-hidden="true">↗</span></a><!-- /profile:telegram --></li>
+          <li><!-- profile:x --><a href="https://x.com/sundyli1">X <span class="arrow" aria-hidden="true">↗</span></a><!-- /profile:x --></li>
+          <li class="playground-jump"><a href="#playground">试跑 SQL <span class="arrow" aria-hidden="true">↓</span></a></li>
+        </ul>
+      </div>
+      <figure class="avatar">
+        <div class="avatar-frame"><img src="/assets/avatar.jpeg" width="400" height="400" alt=""></div>
+        <figcaption><!-- profile:avatar-handle -->@sundy-li<!-- /profile:avatar-handle --></figcaption>
+      </figure>
+    </section>
+
+    <section class="playground" id="playground" aria-labelledby="playground-title" tabindex="-1">
+      <header class="playground-heading">
+        <div>
+          <h2 id="playground-title" lang="en">SQL Playground</h2>
+          <p>用 SQL 查询我的公开资料。运行 <code>DESCRIBE profile;</code> 可以查看全部字段。</p>
+        </div>
+        <span class="playground-mode"><span class="marker" aria-hidden="true"></span> 浏览器本地运行</span>
+      </header>
+      <div class="sql-console">
+        <form class="sql-form" aria-labelledby="playground-title">
+          <div class="sql-toolbar">
+            <label for="sql-input">SQL <span class="sql-tab-name" aria-hidden="true">/ queries.sql</span></label>
+            <button type="button" class="sql-reset" disabled>恢复示例</button>
+          </div>
+          <textarea id="sql-input" name="sql" rows="5" maxlength="8192" required disabled
+            autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-describedby="sql-help">SELECT name, location, university,
+       focus_areas, tech_stack,
+       current_project, early_project
+FROM profile;</textarea>
+          <div class="sql-actions">
+            <button type="submit" class="sql-run" disabled><span aria-hidden="true" class="sql-command-icon">▶</span> <span class="sql-command">运行 SQL</span></button>
+            <p id="sql-help">数据表：<code>profile</code> <span class="sql-shortcut">· <kbd>Ctrl</kbd> / <kbd>⌘</kbd> + <kbd>Enter</kbd></span></p>
+          </div>
+        </form>
+        <div class="sql-output">
+          <p class="sql-status" role="status">运行后在这里查看查询结果。</p>
+          <pre class="sql-error" hidden></pre>
+          <div class="sql-result" role="region" aria-label="SQL 查询结果" tabindex="0" hidden></div>
+          <noscript><p>启用 JavaScript 后即可运行 SQL。</p></noscript>
+        </div>
+      </div>
+    </section>
+
+    <section class="detail" id="databend">
+      <h2 class="section-heading"><!-- profile:project -->Databend<!-- /profile:project --></h2>
+      <p class="detail-copy"><!-- profile:work -->我在 <a href="https://github.com/datafuselabs">Datafuse Labs</a> 参与开发 <a href="https://github.com/databendlabs/databend">Databend</a>，一个用 Rust 构建的开源云原生数仓。早期也曾为 <a href="https://github.com/ClickHouse/ClickHouse">ClickHouse</a> 贡献代码。<!-- /profile:work --></p>
+    </section>
+  </main>
+
+  <footer class="site-footer shell">
+    <span><!-- profile:footer-name -->Sundy Li<!-- /profile:footer-name --></span>
+    <!-- profile:source --><a href="https://github.com/sundy-li/sundy-li.github.io">网站源码 <span class="arrow" aria-hidden="true">↗</span></a><!-- /profile:source -->
+  </footer>
+</body>
+</html>

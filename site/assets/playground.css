@@ -1,0 +1,178 @@
+.link-list .playground-jump a {
+  padding-inline: 0.9rem;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--paper);
+  font-weight: 650;
+}
+
+.playground-jump .arrow { color: inherit; }
+.link-list .playground-jump a:hover { background: var(--ink); border-color: var(--ink); }
+
+.playground {
+  --terminal: #151914;
+  --terminal-top: #1c231a;
+  --terminal-output: #111510;
+  --error-ink: #ffb69b;
+  scroll-margin-block-start: 1.5rem;
+  padding-block: clamp(1.65rem, 3.5vw, 3rem) clamp(2rem, 4.5vw, 3.5rem);
+  border-block-start: 1px solid var(--line);
+}
+
+.playground-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.7rem 1.5rem;
+  margin-block-end: 1.25rem;
+}
+
+.playground-heading h2 {
+  font-size: clamp(1.5rem, 1.22rem + 1.1vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+
+.playground-heading p { margin-block-start: 0.4rem; color: var(--body); }
+
+.playground-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent);
+  font: 0.8125rem/1.5 var(--mono);
+}
+
+.sql-console {
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--terminal);
+  font: 0.875rem/1.5 var(--mono);
+}
+
+.sql-console :is(.sql-toolbar, .sql-actions, .sql-output) {
+  padding-inline: clamp(0.8rem, 2.4vw, 1.5rem);
+}
+
+.sql-toolbar, .sql-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding-block: 0.3rem;
+}
+
+.sql-toolbar {
+  background: var(--terminal-top);
+  border-block-end: 1px solid var(--line);
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.sql-toolbar label { font-weight: 650; }
+.sql-tab-name, #sql-help { color: var(--muted); font-weight: 400; }
+
+.sql-console button {
+  min-block-size: 3rem;
+  padding-inline: 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.sql-console button:disabled { opacity: 0.55; cursor: default; }
+.sql-console .sql-reset:not(:disabled):hover { text-decoration: underline; }
+
+.sql-console textarea {
+  display: block;
+  inline-size: 100%;
+  min-block-size: 8.5rem;
+  padding: 0.875rem clamp(0.8rem, 2.4vw, 1.5rem);
+  border: 0;
+  border-block-end: 1px solid var(--control);
+  border-radius: 0;
+  background: var(--terminal-output);
+  color: var(--accent);
+  font: 1rem/1.55 var(--mono);
+  resize: vertical;
+}
+
+.sql-console textarea:focus-visible { outline-offset: -2px; }
+.sql-console textarea:disabled { opacity: 1; }
+
+.sql-actions { justify-content: flex-start; padding-block: 0.7rem; }
+
+.sql-console .sql-run {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: var(--accent);
+  color: var(--paper);
+  font-weight: 650;
+}
+
+.sql-console .sql-run:not(:disabled):hover { background: var(--ink); }
+.sql-command-icon { font-size: 0.7em; }
+.sql-shortcut { white-space: nowrap; }
+.sql-console kbd, .sql-console code { font: inherit; }
+
+.sql-output {
+  padding-block: 0.85rem;
+  border-block-start: 1px solid var(--line);
+  border-radius: 0 0 0.5rem 0.5rem;
+  background: var(--terminal-output);
+}
+
+.sql-status { color: var(--muted); font-variant-numeric: tabular-nums; }
+.sql-status[data-state="success"] { color: var(--accent); }
+.sql-status[data-state="error"], .sql-error { color: var(--error-ink); }
+
+.sql-error {
+  margin: 0.6rem 0 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+}
+
+.sql-result {
+  overflow: auto;
+  max-block-size: 20rem;
+  max-inline-size: 100%;
+  margin-block-start: 0.75rem;
+  border: 1px solid var(--line);
+}
+
+.sql-result table {
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: start;
+  font-variant-numeric: tabular-nums;
+}
+
+.sql-result thead { position: sticky; inset-block-start: 0; }
+.sql-result th { background: var(--terminal-top); text-align: start; }
+.sql-result td { color: var(--body); }
+.sql-result tbody tr:nth-child(even) { background: var(--terminal); }
+
+.sql-result :is(th, td) {
+  padding: 0.55rem 0.85rem;
+  border-block-end: 1px solid var(--line);
+  max-inline-size: 26rem;
+  vertical-align: top;
+}
+
+.sql-result th { white-space: nowrap; }
+.sql-result td { min-inline-size: 7rem; overflow-wrap: anywhere; }
+
+@media (pointer: coarse) {
+  .sql-shortcut { display: none; }
+}
+
+@media (forced-colors: active) {
+  .sql-console .sql-run { border-color: ButtonText; }
+}

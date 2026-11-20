@@ -1,9 +1,5 @@
 {
-  "build": {
-    "env": {
-      "HUGO_VERSION": "0.91.2",
-      "HUGO_ENV": "production"
-    }
-  },
+  "framework": null,
+  "outputDirectory": "site",
   "trailingSlash": true
 }
