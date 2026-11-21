@@ -9,7 +9,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 SITE = Path(__file__).resolve().parents[1] / "site"
-PAGES = {"zh-CN": "index.html", "en": "en/index.html"}
+PAGES = {"en": "index.html", "zh-CN": "zh/index.html"}
 
 
 def join_list(terms, lang):
@@ -47,8 +47,8 @@ def profile_slots(profile, lang):
     summary = escape(profile["project_summary"][lang])
     early_project = link(profile["early_project_url"], profile["early_project"])
     description = (
-        f"{name}（{handle}）的个人主页。常驻{location}，专注于{plain_focus}。" if zh else
-        f"{name} ({handle}), based in {location} and focused on {plain_focus}."
+        f"{name}（{handle}）的个人主页。专注于{plain_focus}，常驻{location}。" if zh else
+        f"{name} ({handle}), focused on {plain_focus} and based in {location}."
     )
     return {
         "description": f'<meta name="description" content="{description}">',
@@ -56,9 +56,10 @@ def profile_slots(profile, lang):
         "handle": handle,
         "name": name,
         "intro": (
-            f"我常驻{location}，毕业于{university}，专注于{focus}。熟悉 {tech_stack}。" if zh else
-            f"I’m based in {location} and graduated from {university}. "
-            f"I focus on {focus}. I work with {tech_stack}."
+            f"我专注于{focus}，熟悉 {tech_stack}。"
+            f"我常驻{location}，毕业于{university}。" if zh else
+            f"I focus on {focus}. I work with {tech_stack}. "
+            f"I’m based in {location} and graduated from {university}."
         ),
         "github": link(profile["github"], "GitHub", external=True),
         "telegram": link(profile["telegram"], "Telegram", external=True),

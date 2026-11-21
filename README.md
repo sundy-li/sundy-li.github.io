@@ -1,6 +1,6 @@
 # Sundy Li · 个人主页
 
-新站是纯静态 HTML、CSS 和 JavaScript，不需要 Hugo、Node.js 或其他构建工具。只发布 `site/`，旧博客的 Hugo 源文件保留在仓库中，不会出现在新站。旧的 `/about/` 会跳转到首页。
+新站是纯静态 HTML、CSS 和 JavaScript，不需要 Hugo、Node.js 或其他构建工具。只发布 `site/`，旧博客的 Hugo 源文件保留在仓库中，不会出现在新站。默认首页 `/` 为英文，中文版位于 `/zh/`。旧的 `/en/` 和 `/about/` 分别跳转到对应语言的首页。
 
 ## 预览和修改
 
